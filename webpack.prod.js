@@ -1,38 +1,12 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
+const merge = requre('webpack-merge');
 const TerserPlugin = require('terser-webpack-plugin');
-const webpack = require('webpack');
 
-module.exports = {
-  entry: ['./src/index.tsx'],
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader'],
-      },
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-    ],
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-  },
-  output: {
-    path: `${__dirname}/public`,
-    publicPath: '/',
-    filename: 'app.min.js',
-  },
+const base = require('./webpack.config.js');
+
+module.exports = merge(base, {
+  mode: 'production',
+  devtools: 'none',
   optimization: {
     minimizer: [new TerserPlugin()],
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      __DEV__: true,
-    }),
-  ],
-};
+  }
+});

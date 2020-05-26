@@ -1,18 +1,16 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "commonjs",
     "outDir": "dist/",
-    "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "target": "ESNext",
+    "target": "ES2018",
     "allowJs": true,
     "checkJs": false,
     "jsx": "react",
     "pretty": true,
     "skipLibCheck": true,
-    "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "lib": ["dom", "dom.iterable", "ESNext"],
@@ -21,6 +19,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": ["src"],
+  "include": ["src", "examples"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

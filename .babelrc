@@ -4,6 +4,15 @@
     "@babel/preset-react"
   ],
   "plugins": [
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "style": "less"
+      }
+    ],
+    "@babel/plugin-syntax-dynamic-import",
+    "styled-jsx/babel",
     "@babel/plugin-transform-regenerator",
     "@babel/plugin-transform-runtime"
   ]

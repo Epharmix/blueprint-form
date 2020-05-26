@@ -4,24 +4,52 @@ const webpack = require('webpack');
 module.exports = {
   mode: 'development',
   watch: true,
-  entry: ['./src/index.tsx'],
+  entry: ['./examples/index.tsx'],
   devtool: 'inline-source-map',
   module: {
     rules: [
       {
-        test: /\.(js)$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        use: [
+          {
+            loader: 'babel-loader'
+          }
+        ],
       },
       {
-        test: /\.tsx?$/,
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              lessOptions: {
+                javascriptEnabled: true
+              }
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(ts|tsx)$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: path.resolve(__dirname, 'node_modules'),
       },
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    modules: ['node_modules'],
+    extensions: ['.tsx', '.ts', '.js', '.jsx'],
   },
   output: {
     path: `${__dirname}/public`,
