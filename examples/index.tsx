@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Layout, Card, Button, Modal } from 'antd';
 
 import Editor from 'react-simple-code-editor';
