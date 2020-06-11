@@ -1,4 +1,8 @@
 import { Component } from 'react';
+import { FormikErrors, FormikValues } from 'formik';
+
+export type FormErrors = FormikErrors<FormikValues>;
+export type FormData = FormikValues;
 
 export enum MarkupType {
   Text = 'text',
@@ -12,14 +16,14 @@ export interface MarkupProps {
   required?: boolean
 }
 
-export abstract class Markup extends Component<MarkupProps> {
+export abstract class Markup<P extends MarkupProps> extends Component<P> {
 
   public readonly abstract type: MarkupType;
   public readonly label?: string;
   public readonly name?: string;
   public required?: boolean;
 
-  constructor(props: MarkupProps) {
+  constructor(props: P) {
     super(props);
     this.label = props.label;
     this.name = props.name;

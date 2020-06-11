@@ -3,39 +3,40 @@
  */
 
 import React from 'react';
-import { Form as _Form } from 'antd';
+import { Formik, FormikValues } from 'formik';
 
+import { FormErrors } from './interfaces';
 import FormInstance from './instance';
 
-interface FormProps {
-  form: FormInstance,
+interface FormProps<Values extends FormikValues> {
+  form: FormInstance<Values>,
+  validate?: (values: Values) => void | FormErrors | Promise<FormErrors>;
   children?: React.ReactElement[],
-  layout?: 'vertical' | 'horizontal' | 'inline',
   onSubmit?: (data: any) => void
 }
 
-const Form = ({form: instance, children, layout, onSubmit}: FormProps): JSX.Element => {
-
-  const [_form] = _Form.useForm();
-
-  instance.setForm(_form);
-
-  const onFinish = () => {
-    if (onSubmit) {
-      onSubmit(instance.getData());
-    }
-  }
+const WeaverForm = <Values extends FormikValues>({form: instance, validate, children, onSubmit}: FormProps<Values>): JSX.Element => {
 
   return (
-    <_Form
-      form={_form}
-      onFinish={onFinish}
-      layout={layout}
+    <Formik
+      initialValues={instance.toFormData(instance.initialData)}
+      validate={validate}
+      onSubmit={onSubmit}
     >
-      {children}
-    </_Form>
+      {(props) => {
+        instance.setForm(props);
+        return (
+          <form
+            onReset={props.handleReset}
+            onSubmit={props.handleSubmit}
+          >
+            {children}
+          </form>
+        );
+      }}
+    </Formik>
   );
 
 };
 
-export default Form;
+export default WeaverForm;

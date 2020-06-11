@@ -1,15 +1,16 @@
+
 import moment from 'moment-timezone';
 
 import React, { useEffect } from 'react';
 import {
-  Card,
-  Row,
-  Col
-} from 'antd';
+  Card
+} from '@blueprintjs/core';
 
 import {
   Form,
   FormInstance,
+  FormData,
+  FormErrors,
   DateInput,
   TextInput,
   SubmitButton
@@ -22,45 +23,50 @@ export interface EnrollData {
   lastName?: string
 }
 
-const DATE_FORMAT = 'YYYY-MM-DD';
+const REGEX_NAME = /^[a-zA-Z ]+$/;
 
-class EnrollFormInstance extends FormInstance {
+class EnrollFormInstance extends FormInstance<EnrollData> {
 
-  public getData(): EnrollData {
-    const values = this._getData();
-    const start = values.start as moment.Moment;
-    const end = values.end as moment.Moment;
-    const data = {
-      start: start ? start.format(DATE_FORMAT) : null,
-      end: end ? end.format(DATE_FORMAT) : null,
-      firstName: values.firstName || '',
-      lastName: values.lastName || ''
-    };
-    return data;
+  constructor(initialData: EnrollData) {
+    super(initialData);
   }
 
-  public setData(data: EnrollData): void {
-    let start: moment.Moment = null;
-    if (data.start) {
-      const _start = moment(data.start, DATE_FORMAT, true);
-      if (_start.isValid()) {
-        start = _start;
-      }
-    }
-    let end: moment.Moment = null;
-    if (data.end) {
-      const _end = moment(data.end, DATE_FORMAT, true);
-      if (_end.isValid()) {
-        end = _end;
-      }
-    }
-    const values = {
-      start: start,
-      end: end,
+  public toFormData(data: EnrollData): FormData {
+    const _data = {
+      start: null,
+      end: null,
       firstName: data.firstName,
       lastName: data.lastName
     };
-    this._setData(values);
+    if (data.start != null) {
+      const start = moment(data.start, 'MM/DD/YYYY', true);
+      if (start.isValid()) {
+        _data.start = start.toDate();
+      }
+    }
+    if (data.end != null) {
+      const end = moment(data.end, 'MM/DD/YYYY', true);
+      if (end.isValid()) {
+        _data.end = end.toDate();
+      }
+    }
+    return _data;
+  }
+
+  public fromFormData(data: FormData): EnrollData {
+    const _data = {
+      start: null,
+      end: null,
+      firstName: data.firstName,
+      lastName: data.lastName
+    };
+    if (data.start) {
+      _data.start = moment(data.start).format('MM/DD/YYYY');
+    }
+    if (data.end) {
+      _data.end = moment(data.end).format('MM/DD/YYYY');
+    }
+    return _data;
   }
 
 }
@@ -72,7 +78,12 @@ export interface EnrollProps {
 
 const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
 
-  const form = new EnrollFormInstance();
+  const form = new EnrollFormInstance({
+    start: '01/01/2020',
+    end: null,
+    firstName: 'John',
+    lastName: 'Doe'
+  });
 
   useEffect(() => {
     if (!data) {
@@ -81,43 +92,42 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
     form.setData(data);
   }, [data]);
 
+  const validate = (values: FormData): FormErrors => {
+    const errors: FormErrors = {};
+    if (values.start != null && values.end != null && values.start > values.end) {
+      errors.end = 'The end date must be after the start date!';
+    }
+    return errors;
+  };
+
   return (
     <Card>
       <Form
         form={form}
-        layout="vertical"
-        onSubmit={onSubmit}
+        validate={validate}
+        onSubmit={(data) => onSubmit(form.fromFormData(data))}
       >
-        <Row gutter={12}>
-          <Col span={12}>
-            <DateInput
-              label="Start Date"
-              name="start"
-              required
-            />
-          </Col>
-          <Col span={12}>
-            <DateInput
-              label="End Date"
-              name="end"
-            />
-          </Col>
-        </Row>
-        <Row gutter={12}>
-          <Col span={12}>
-            <TextInput
-              label="First Name"
-              name="firstName"
-              required
-            />
-          </Col>
-          <Col span={12}>
-            <TextInput
-              label="Last Name"
-              name="lastName"
-            />
-          </Col>
-        </Row>
+        <DateInput
+          label="Start Date"
+          name="start"
+          required
+        />
+        <DateInput
+          label="End Date"
+          name="end"
+        />
+        <TextInput
+          label="First Name"
+          name="firstName"
+          pattern={REGEX_NAME}
+          required
+        />
+        <TextInput
+          label="Last Name"
+          name="lastName"
+          pattern={REGEX_NAME}
+          required
+        />
         <SubmitButton>
           Get Data
         </SubmitButton>

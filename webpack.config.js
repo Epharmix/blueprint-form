@@ -22,7 +22,7 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.less$/,
+        test: /\.s[ac]ss$/i,
         use: [
           {
             loader: 'style-loader'
@@ -31,12 +31,7 @@ module.exports = {
             loader: 'css-loader'
           },
           {
-            loader: 'less-loader',
-            options: {
-              lessOptions: {
-                javascriptEnabled: true
-              }
-            }
+            loader: 'sass-loader',
           }
         ]
       },
@@ -49,7 +44,7 @@ module.exports = {
   },
   resolve: {
     modules: ['node_modules'],
-    extensions: ['.tsx', '.ts', '.js', '.jsx'],
+    extensions: ['.tsx', '.ts', '.js', '.jsx', '.css', '.scss'],
   },
   output: {
     path: `${__dirname}/public`,

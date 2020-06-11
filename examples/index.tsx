@@ -1,13 +1,11 @@
 import ReactDOM from 'react-dom';
 import React, { useState } from 'react';
-import { Layout, Card, Button, Modal } from 'antd';
+import { Card, Button, Toaster, Intent, Position } from '@blueprintjs/core';
 
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-json';
 import 'prismjs/themes/prism-okaidia.css';
-
-const { Content } = Layout;
 
 import Enroll, { EnrollData } from './enroll';
 
@@ -26,44 +24,44 @@ const App = () => {
       const data = JSON.parse(rawData);
       setFormData(data);
     } catch (err) {
-      Modal.error({
-        title: 'Invalid Form Data',
-        content: 'The form data is not valid JSON, please check!'
+      Toaster.create({
+        position: Position.TOP
+      }).show({
+        intent: Intent.DANGER,
+        message: 'The form data is not valid JSON, please check!'
       });
       return;
     }
   };
 
   return (
-    <Layout>
-      <Content style={{ padding: '50px' }}>
-        <Enroll
-          data={formData}
-          onSubmit={onSubmit}
+    <Card>
+      <Enroll
+        data={formData}
+        onSubmit={onSubmit}
+      />
+      <br />
+      <Card>
+        <Editor
+          highlight={value => highlight(value, languages.json)}
+          value={rawData}
+          onValueChange={(value) => setRawData(value)}
+          tabSize={2}
+          insertSpaces={true}
+          style={{
+            minHeight: '150px',
+            backgroundColor: '#1E1E1E',
+            caretColor: '#FFF',
+            color: '#FFF'
+          }}
+          padding={20}
         />
         <br />
-        <Card>
-          <Editor
-            highlight={value => highlight(value, languages.json)}
-            value={rawData}
-            onValueChange={(value) => setRawData(value)}
-            tabSize={2}
-            insertSpaces={true}
-            style={{
-              minHeight: '150px',
-              backgroundColor: '#1E1E1E',
-              caretColor: '#FFF',
-              color: '#FFF'
-            }}
-            padding={20}
-          />
-          <br />
-          <Button type="primary" onClick={setData}>
-            Set Data
-          </Button>
-        </Card>
-      </Content>
-    </Layout>
+        <Button onClick={setData}>
+          Set Data
+        </Button>
+      </Card>
+    </Card>
   );
 
 };
