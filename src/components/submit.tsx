@@ -5,7 +5,8 @@
 import React from 'react';
 import { Button } from '@blueprintjs/core';
 
-import { MarkupType, MarkupProps, Markup } from './interfaces';
+import { MarkupType } from './types';
+import { MarkupProps, Markup } from './markup';
 
 interface SubmitButtonProps extends MarkupProps {
   icon?: JSX.Element

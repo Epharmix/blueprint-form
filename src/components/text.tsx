@@ -6,7 +6,8 @@ import React from 'react';
 import { Field } from 'formik';
 import { FormGroup, InputGroup } from '@blueprintjs/core';
 
-import { MarkupType, MarkupProps, Markup } from './interfaces';
+import { MarkupType } from './types';
+import { MarkupProps, Markup } from './markup';
 
 export interface TextInputProps extends MarkupProps {
   pattern?: RegExp
@@ -15,17 +16,15 @@ export interface TextInputProps extends MarkupProps {
 export default class TextInput extends Markup<TextInputProps> {
   
   public readonly type: MarkupType = MarkupType.Text;
-  public readonly pattern?: RegExp;
 
   constructor(props: TextInputProps) {
     super(props);
-    this.pattern = props.pattern;
     this.validate = this.validate.bind(this);
   }
 
   private validate(value): string {
     let error: string;
-    if (this.pattern && !this.pattern.test(value)) {
+    if (this.props.pattern && !this.props.pattern.test(value)) {
       error = 'This is not in valid format!';
     }
     return error;
@@ -37,12 +36,13 @@ export default class TextInput extends Markup<TextInputProps> {
         {({ field, meta }) => (
           <FormGroup
             label={this.label}
-            labelFor={this.name}
+            labelFor={this.id}
             labelInfo={this.required ? '(required)' : ''}
             intent={meta.error && meta.touched ? 'danger' : 'none'}
             helperText={meta.error}
           >
             <InputGroup 
+              id={this.id}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
               {...field} 
             />

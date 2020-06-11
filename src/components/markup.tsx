@@ -1,14 +1,8 @@
+import uid from 'uid';
+
 import { Component } from 'react';
-import { FormikErrors, FormikValues } from 'formik';
 
-export type FormErrors = FormikErrors<FormikValues>;
-export type FormData = FormikValues;
-
-export enum MarkupType {
-  Text = 'text',
-  Date = 'date',
-  Submit = 'submit'
-}
+import { MarkupType } from './types';
 
 export interface MarkupProps {
   label?: string,
@@ -23,11 +17,14 @@ export abstract class Markup<P extends MarkupProps> extends Component<P> {
   public readonly name?: string;
   public required?: boolean;
 
+  protected readonly id: string;
+
   constructor(props: P) {
     super(props);
     this.label = props.label;
     this.name = props.name;
     this.required = props.required;
+    this.id = uid(16);
   }
 
   protected getRules(): any[] {

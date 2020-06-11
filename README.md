@@ -20,8 +20,8 @@ This will start the `webpack-dev-server` at port `9000`, with hot reload enabled
 - [x] TypeScript based environment
 - [x] Two-way (get & set) form setup
 - [x] Ability to have fully flexible JSX mockup within the forms
-- [ ] Individual input validation controls
-- [ ] Input dependencies and variations 
+- [x] Individual input validation controls
+- [x] Input dependencies and variations 
 - [ ] Customization framework (e.g. composite controls)
 - [ ] File upload input
 

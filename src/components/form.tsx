@@ -3,15 +3,16 @@
  */
 
 import React from 'react';
-import { Formik, FormikValues } from 'formik';
+import { Formik, FormikValues, FormikProps } from 'formik';
 
-import { FormErrors } from './interfaces';
+import { FormErrors } from './types';
 import FormInstance from './instance';
+import { isFunction } from '../utils';
 
 interface FormProps<Values extends FormikValues> {
   form: FormInstance<Values>,
   validate?: (values: Values) => void | FormErrors | Promise<FormErrors>;
-  children?: React.ReactElement[],
+  children?: ((props: FormikProps<Values>) => JSX.Element) | JSX.Element | JSX.Element[],
   onSubmit?: (data: any) => void
 }
 
@@ -19,7 +20,7 @@ const WeaverForm = <Values extends FormikValues>({form: instance, validate, chil
 
   return (
     <Formik
-      initialValues={instance.toFormData(instance.initialData)}
+      initialValues={instance.initialFormData}
       validate={validate}
       onSubmit={onSubmit}
     >
@@ -30,7 +31,13 @@ const WeaverForm = <Values extends FormikValues>({form: instance, validate, chil
             onReset={props.handleReset}
             onSubmit={props.handleSubmit}
           >
-            {children}
+            {
+              children
+                ? isFunction(children)  
+                  ? (children as (props: FormikProps<Values>) => JSX.Element)(props)
+                  : children
+                : null
+            }
           </form>
         );
       }}

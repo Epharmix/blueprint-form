@@ -1,3 +1,5 @@
+import '../src/style.scss';
+
 import ReactDOM from 'react-dom';
 import React, { useState } from 'react';
 import { Card, Button, Toaster, Intent, Position } from '@blueprintjs/core';
@@ -41,7 +43,7 @@ const App = () => {
         onSubmit={onSubmit}
       />
       <br />
-      <Card>
+      <Card className="exclude-axe">
         <Editor
           highlight={value => highlight(value, languages.json)}
           value={rawData}
@@ -66,11 +68,21 @@ const App = () => {
 
 };
 
-ReactDOM.render(<App />, document.querySelector('#container'));
+const render = () => {
+  ReactDOM.render(<App />, document.querySelector('#container'));
+};
+
+import('react-axe').then(({ default: axe }) => {
+  axe(React, ReactDOM, 1000, undefined, {
+    exclude: [['.exclude-axe']]
+  });
+  render();
+});
+
+/* eslint-disable no-console */
 
 if (module && module.hot) {
   module.hot.accept();
-
   module.hot.addStatusHandler((status) => {
     if (status === 'prepare') console.clear();
   });

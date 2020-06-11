@@ -3,9 +3,10 @@ import moment from 'moment';
 import React from 'react';
 import { Field } from 'formik';
 import { FormGroup } from '@blueprintjs/core';
-import { DateInput as _DateInput } from "@blueprintjs/datetime";
+import { DateInput as _DateInput } from '@blueprintjs/datetime';
 
-import { MarkupType, MarkupProps, Markup } from './interfaces';
+import { MarkupType } from './types';
+import { MarkupProps, Markup } from './markup';
 
 type DateFormat = 'YYYY-MM-DD' | 'MM/DD/YYYY';
 
@@ -56,7 +57,7 @@ export default class DateInput extends Markup<DateInputProps> {
         {({ field, form, meta }) => (
           <FormGroup
             label={this.label}
-            labelFor={this.name}
+            labelFor={this.id}
             labelInfo={this.required ? '(required)' : ''}
             intent={meta.error && meta.touched ? 'danger' : 'none'}
             helperText={meta.error}
@@ -66,6 +67,7 @@ export default class DateInput extends Markup<DateInputProps> {
               parseDate={this.parseDate}
               placeholder={this.format}
               inputProps={{
+                id: this.id,
                 name: field.name,
                 intent: meta.error && meta.touched ? 'danger' : 'none'
               }}
