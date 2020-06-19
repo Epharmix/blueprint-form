@@ -1,5 +1,6 @@
 
 import moment from 'moment-timezone';
+import * as z from 'zod';
 
 import React, { useEffect } from 'react';
 import {
@@ -12,89 +13,27 @@ import {
   FormData,
   FormErrors,
   DateInput,
+  StartDateInput,
+  EndDateInput,
   TextInput,
+  NumberInput,
   SubmitButton,
   SwitchInput
 } from '../src/index';
 
-/**
- * Enroll Data
- * 
- * This is the outward facing data schema to expose
- */
-export interface EnrollData {
-  start?: string,
-  end?: string,
-  firstName?: string,
-  lastName?: string,
-  hasScale: boolean,
-  baselineWeight?: number
-}
+const EnrollSchema = z.object({
+  start: z.date(),
+  end: z.date().nullable(),
+  examAt: z.date().nullable(),
+  firstName: z.string(),
+  lastName: z.string(),
+  hasScale: z.boolean(),
+  baselineWeight: z.number().nullable().optional()
+});
+
+export type EnrollData = z.infer<typeof EnrollSchema>;
 
 const REGEX_NAME = /^[a-zA-Z ]+$/;
-
-/**
- * Enroll Form Instance
- * 
- * Encapsulates data transformation methods
- */
-class EnrollFormInstance extends FormInstance<EnrollData> {
-
-  constructor(initialData: EnrollData) {
-    super(initialData);
-  }
-
-  /**
-   * Translate to internal data to be used in forms
-   * 
-   * @param data the external data
-   */
-  public toInternal(data: EnrollData): FormData {
-    const _data = {
-      start: null,
-      end: null,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      hasScale: data.hasScale
-    };
-    if (data.start != null) {
-      const start = moment(data.start, 'MM/DD/YYYY', true);
-      if (start.isValid()) {
-        _data.start = start.toDate();
-      }
-    }
-    if (data.end != null) {
-      const end = moment(data.end, 'MM/DD/YYYY', true);
-      if (end.isValid()) {
-        _data.end = end.toDate();
-      }
-    }
-    return _data;
-  }
-
-  /**
-   * Translate internal form data to external format
-   * 
-   * @param data the internal form data
-   */
-  public toExternal(data: FormData): EnrollData {
-    const _data = {
-      start: null,
-      end: null,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      hasScale: data.hasScale
-    };
-    if (data.start) {
-      _data.start = moment(data.start).format('MM/DD/YYYY');
-    }
-    if (data.end) {
-      _data.end = moment(data.end).format('MM/DD/YYYY');
-    }
-    return _data;
-  }
-
-}
 
 export interface EnrollProps {
   data?: EnrollData,
@@ -104,9 +43,10 @@ export interface EnrollProps {
 const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
 
   // Instantiate the form instance
-  const form = new EnrollFormInstance({
-    start: '01/01/2020',
+  const form = new FormInstance<EnrollData>({
+    start: moment().add(1, 'day').toDate(),
     end: null,
+    examAt: null,
     firstName: 'John',
     lastName: 'Doe',
     hasScale: false,
@@ -133,18 +73,25 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
       <Form
         form={form}
         validate={validate}
-        onSubmit={(data) => onSubmit(form.toExternal(data))}
+        onSubmit={(data) => onSubmit(data)}
       >
         {(props) => (
           <React.Fragment>
-            <DateInput
+            <StartDateInput
               label="Start Date"
               name="start"
+              fill
               required
             />
-            <DateInput
+            <EndDateInput
               label="End Date"
               name="end"
+              fill
+            />
+            <DateInput
+              label="Exam Date"
+              name="examAt"
+              fill
             />
             <TextInput
               label="First Name"
@@ -163,12 +110,14 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
               name="hasScale"
             />
             {props.values.hasScale && (
-              <TextInput
+              <NumberInput
                 label="Baseline Weight (lbs)"
                 name="baselineWeight"
+                fill
                 required
               />
             )}
+            <br />
             <SubmitButton>
               Get Data
             </SubmitButton>

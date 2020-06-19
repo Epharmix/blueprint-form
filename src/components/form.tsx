@@ -13,14 +13,14 @@ interface FormProps<Values extends FormikValues> {
   form: FormInstance<Values>,
   validate?: (values: Values) => void | FormErrors | Promise<FormErrors>;
   children?: ((props: FormikProps<Values>) => JSX.Element) | JSX.Element | JSX.Element[],
-  onSubmit?: (data: any) => void
+  onSubmit: (data: any) => void
 }
 
 const WeaverForm = <Values extends FormikValues>({form: instance, validate, children, onSubmit}: FormProps<Values>): JSX.Element => {
 
   return (
     <Formik
-      initialValues={instance.initialFormData}
+      initialValues={instance.initialData}
       validate={validate}
       onSubmit={onSubmit}
     >

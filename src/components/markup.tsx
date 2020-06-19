@@ -2,15 +2,16 @@ import uid from 'uid';
 
 import { Component } from 'react';
 
-import { MarkupType } from './types';
+import { MarkupType, FormValue, FormError } from './types';
 
 export interface MarkupProps {
   label?: string,
   name?: string,
+  fill?: boolean,
   required?: boolean
 }
 
-export abstract class Markup<P extends MarkupProps> extends Component<P> {
+export abstract class Markup<P extends MarkupProps, S = unknown> extends Component<P, S> {
 
   public readonly abstract type: MarkupType;
   public readonly label?: string;
@@ -27,15 +28,14 @@ export abstract class Markup<P extends MarkupProps> extends Component<P> {
     this.id = uid(16);
   }
 
-  protected getRules(): any[] {
-    const rules: any[] = [];
+  protected _validate(value: FormValue): FormError {
+    let error: FormError = null;
     if (this.required) {
-      rules.push({
-        required: true,
-        message: 'This is required!'
-      });
+      if (value == null) {
+        error = 'This field is required!';
+      }
     }
-    return rules;
+    return error;
   }
 
   public abstract render(): JSX.Element;

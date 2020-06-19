@@ -1,28 +1,21 @@
 import { FormikProps } from 'formik';
 
-import { FormData } from './types';
+export default class FormInstance<Data> {
 
-export default abstract class FormInstance<Data> {
+  protected form: FormikProps<Data> | null;
+  public readonly initialData: Data | null;
 
-  protected form: FormikProps<FormData>;
-  public readonly initialData: Data;
-  public readonly initialFormData: FormData;
-
-  constructor(initialData?: Data) {
+  constructor(initialData: Data) {
     this.form = null;
     this.initialData = initialData;
-    this.initialFormData = this.toInternal(initialData);
   }
 
-  public setForm(form: FormikProps<FormData>): void {
+  public setForm(form: FormikProps<Data>): void {
     this.form = form;
   }
 
   public setData(data: Data): void {
-    this.form.setValues(this.toInternal(data));
+    this.form?.setValues(data);
   }
-
-  public abstract toInternal(data: Data): FormData;
-  public abstract toExternal(data: FormData): Data;
 
 }

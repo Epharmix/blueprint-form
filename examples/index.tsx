@@ -14,7 +14,7 @@ import Enroll, { EnrollData } from './enroll';
 const App = () => {
 
   const [rawData, setRawData] = useState('');
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState(undefined);
 
   const onSubmit = (data: EnrollData) => {
     setRawData(JSON.stringify(data, null, 2));

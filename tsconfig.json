@@ -17,7 +17,8 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "strictNullChecks": true
   },
   "include": ["src", "examples"],
   "exclude": ["node_modules", "**/*.spec.ts"]
