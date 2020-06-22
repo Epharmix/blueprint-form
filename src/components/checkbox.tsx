@@ -1,5 +1,5 @@
 /**
- * Checkbox Input
+ * Checkbox & Checkbox Group
  */
 
 import React from 'react';
@@ -45,7 +45,6 @@ export default class Checkbox extends Markup<CheckboxProps> {
 
 export interface CheckboxGroupProps extends MarkupProps {
   inline?: boolean,
-  isNumeric?: boolean,
   options: Option[],
   minItems?: number,
   maxItems?: number

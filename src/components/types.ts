@@ -12,8 +12,10 @@ export enum MarkupType {
   Text = 'text',
   Number = 'number',
   Switch = 'switch',
+  Select = 'select',
   Checkbox = 'checkbox',
   CheckboxGroup = 'checkbox_group',
+  RadioGroup = 'radio_group',
   Date = 'date',
   Submit = 'submit'
 }

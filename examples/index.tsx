@@ -37,13 +37,23 @@ const App = () => {
   };
 
   return (
-    <Card>
-      <Enroll
-        data={formData}
-        onSubmit={onSubmit}
-      />
-      <br />
-      <Card className="exclude-axe">
+    <Card
+      style={{
+        display: 'flex',
+        flexDirection: 'row'
+      }}
+    >
+      <div style={{
+        width: '50%'
+      }}>
+        <Enroll
+          data={formData}
+          onSubmit={onSubmit}
+        />
+      </div>
+      <Card className="exclude-axe" style={{
+        width: '50%'
+      }}>
         <Editor
           highlight={value => highlight(value, languages.json)}
           value={rawData}

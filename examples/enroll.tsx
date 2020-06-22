@@ -20,7 +20,9 @@ import {
   SubmitButton,
   Switch,
   Checkbox,
-  CheckboxGroup
+  CheckboxGroup,
+  RadioGroup,
+  SelectInput
 } from '../src/index';
 
 const {
@@ -39,7 +41,9 @@ export type EnrollData = {
   isLevelA: boolean,
   isLevelB: boolean,
   modules: string[],
-  days: number[]
+  days: number[],
+  dmType: string,
+  color: string
 };
 
 export type SerializedEnrolleData = {
@@ -69,7 +73,9 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
     isLevelA: false,
     isLevelB: false,
     modules: ['Y'],
-    days: []
+    days: [1, 5],
+    dmType: 'II',
+    color: 'green'
   });
 
   const serialize = (data: EnrollData): FormValues => {
@@ -86,17 +92,10 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
 
   const deserialize = (values: SerializedEnrolleData): EnrollData => {
     const data: EnrollData = {
+      ...values,
       start: DeserializeDate(values.start, DATE_FORMAT),
       end: DeserializeDate(values.end, DATE_FORMAT),
-      examAt: DeserializeDate(values.examAt, DATE_FORMAT),
-      firstName: values.firstName,
-      lastName: values.lastName,
-      hasScale: values.hasScale,
-      baselineWeight: values.baselineWeight,
-      isLevelA: values.isLevelA,
-      isLevelB: values.isLevelB,
-      modules: values.modules,
-      days: values.days
+      examAt: DeserializeDate(values.examAt, DATE_FORMAT)
     };
     return data;
   };
@@ -220,10 +219,35 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
                 label: 'Saturday',
                 value: 6
               }]}
-              isNumeric
               inline
               minItems={2}
               maxItems={3}
+            />
+            <RadioGroup
+              label="Diabetes Type"
+              name="dmType"
+              options={[{
+                label: 'Type I',
+                value: 'I'
+              }, {
+                label: 'Type II',
+                value: 'II'
+              }]}
+            />
+            <SelectInput
+              label="Favorite Color"
+              name="color"
+              options={[{
+                label: 'Red',
+                value: 'red'
+              }, {
+                label: 'Yellow',
+                value: 'yellow'
+              }, {
+                label: 'Green',
+                value: 'green'
+              }]}
+              fill
             />
             <br />
             <SubmitButton>
