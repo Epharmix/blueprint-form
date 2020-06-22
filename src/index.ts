@@ -6,10 +6,11 @@ import NumberInput from './components/number';
 import SwitchInput from './components/switch';
 import SubmitButton from './components/submit';
 
-import { FormData, FormErrors } from './components/types';
+import { FormData, FormValues, FormErrors } from './components/types';
 
 export type {
   FormData,
+  FormValues,
   FormErrors
 };
 

@@ -9,14 +9,14 @@ import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-json';
 import 'prismjs/themes/prism-okaidia.css';
 
-import Enroll, { EnrollData } from './enroll';
+import Enroll from './enroll';
 
 const App = () => {
 
   const [rawData, setRawData] = useState('');
   const [formData, setFormData] = useState(undefined);
 
-  const onSubmit = (data: EnrollData) => {
+  const onSubmit = (data: any) => {
     setRawData(JSON.stringify(data, null, 2));
   };
 
@@ -73,7 +73,7 @@ const render = () => {
 };
 
 import('react-axe').then(({ default: axe }) => {
-  axe(React, ReactDOM, 1000, undefined, {
+  axe(React, ReactDOM, 1000, {}, {
     exclude: [['.exclude-axe']]
   });
   render();

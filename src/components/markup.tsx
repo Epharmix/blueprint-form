@@ -2,7 +2,7 @@ import uid from 'uid';
 
 import { Component } from 'react';
 
-import { MarkupType, FormValue, FormError } from './types';
+import { MarkupType, FormFieldValue, FormError } from './types';
 
 export interface MarkupProps {
   label?: string,
@@ -28,7 +28,7 @@ export abstract class Markup<P extends MarkupProps, S = unknown> extends Compone
     this.id = uid(16);
   }
 
-  protected _validate(value: FormValue): FormError {
+  protected _validate(value: FormFieldValue): FormError {
     let error: FormError = null;
     if (this.required) {
       if (value == null) {

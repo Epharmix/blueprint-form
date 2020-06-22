@@ -1,6 +1,5 @@
 
 import moment from 'moment-timezone';
-import * as z from 'zod';
 
 import React, { useEffect } from 'react';
 import {
@@ -10,8 +9,9 @@ import {
 import {
   Form,
   FormInstance,
-  FormData,
   FormErrors,
+  FormData,
+  FormValues,
   DateInput,
   StartDateInput,
   EndDateInput,
@@ -21,23 +21,27 @@ import {
   SwitchInput
 } from '../src/index';
 
-const EnrollSchema = z.object({
-  start: z.date(),
-  end: z.date().nullable(),
-  examAt: z.date().nullable(),
-  firstName: z.string(),
-  lastName: z.string(),
-  hasScale: z.boolean(),
-  baselineWeight: z.number().nullable().optional()
-});
+const {
+  SerializeDate,
+  DeserializeDate
+} = FormInstance;
 
-export type EnrollData = z.infer<typeof EnrollSchema>;
+export type EnrollData = {
+  start: Date,
+  end?: Date | null,
+  examAt?: Date | null,
+  firstName: string,
+  lastName: string,
+  hasScale: boolean,
+  baselineWeight?: number | null
+};
 
 const REGEX_NAME = /^[a-zA-Z ]+$/;
+const DATE_FORMAT = 'YYYY-MM-DD';
 
 export interface EnrollProps {
-  data?: EnrollData,
-  onSubmit: (data: EnrollData) => void
+  data?: FormValues,
+  onSubmit: (data: any) => void
 }
 
 const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
@@ -53,11 +57,36 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
     baselineWeight: null
   });
 
+  const serialize = (data: EnrollData): FormValues => {
+    const values: FormValues = {};
+    for (const key of Object.keys(data)) {
+      if (data[key] instanceof Date) {
+        values[key] = SerializeDate(data[key], DATE_FORMAT);
+      } else {
+        values[key] = data[key];
+      }
+    }
+    return values;
+  };
+
+  const deserialize = (values: FormValues): EnrollData => {
+    const data: EnrollData = {
+      start: DeserializeDate(values.start as string, DATE_FORMAT) as Date,
+      end: DeserializeDate(values.end as string, DATE_FORMAT),
+      examAt: DeserializeDate(values.examAt as string, DATE_FORMAT),
+      firstName: values.firstName as string,
+      lastName: values.lastName as string,
+      hasScale: values.hasScale as boolean,
+      baselineWeight: values.baselineWeight as number
+    };
+    return data;
+  };
+
   useEffect(() => {
     if (!data) {
       return;
     }
-    form.setData(data);
+    form.setData(deserialize(data));
   }, [JSON.stringify(data)]);
 
   const validate = (values: FormData): FormErrors => {
@@ -68,12 +97,17 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
     return errors;
   };
 
+  const _onSubmit = (data: EnrollData) => {
+    const _data = serialize(data);
+    onSubmit(_data);
+  };
+
   return (
     <Card>
       <Form
         form={form}
         validate={validate}
-        onSubmit={(data) => onSubmit(data)}
+        onSubmit={_onSubmit}
       >
         {(props) => (
           <React.Fragment>

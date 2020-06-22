@@ -2,7 +2,7 @@ import moment from 'moment';
 import uid from 'uid';
 
 import React from 'react';
-import { Field, FormikProps, FieldInputProps, FormikValues } from 'formik';
+import { Field, FormikValues, connect, FormikContextType } from 'formik';
 import { FormGroup } from '@blueprintjs/core';
 import { DateInput as _DateInput } from '@blueprintjs/datetime';
 
@@ -24,7 +24,7 @@ interface DateInputState {
   isNoEnd: boolean
 }
 
-export default class DateInput extends Markup<DateInputProps, DateInputState> {
+class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<FormikValues> }, DateInputState> {
 
   public readonly type: MarkupType = MarkupType.Date;
   private switchId: string;
@@ -40,6 +40,19 @@ export default class DateInput extends Markup<DateInputProps, DateInputState> {
       isNoEnd: false
     };
     return;
+  }
+
+  componentDidUpdate(props: DateInputProps & { formik?: FormikContextType<FormikValues> }, state: DateInputState) {
+    if (this.props.isEndDate && this.props.formik) {
+      const { values } = this.props.formik;
+      if (!(!state.isNoEnd && this.state.isNoEnd)) {
+        if (values[this.name as string] != null && this.state.isNoEnd) {
+          this.setState({
+            isNoEnd: false
+          });
+        }
+      }
+    }
   }
 
   private formatDate(date: Date): string {
@@ -73,13 +86,17 @@ export default class DateInput extends Markup<DateInputProps, DateInputState> {
     return error;
   }
 
-  private toggleNoEnd(form: FormikProps<FormikValues>, field: FieldInputProps<FormikValues>, event: React.ChangeEvent<HTMLInputElement>): void {
+  private toggleNoEnd(event: React.ChangeEvent<HTMLInputElement>): void {
+    if (!this.props.formik) {
+      return;
+    }
+    const { setFieldValue } = this.props.formik;
     const isNoEnd = event.currentTarget.checked;
     this.setState({
       isNoEnd: isNoEnd
     }, () => {
       if (isNoEnd) {
-        form.setFieldValue(field.name, null);
+        setFieldValue(this.name as string, null);
       }
     });
   }
@@ -110,7 +127,8 @@ export default class DateInput extends Markup<DateInputProps, DateInputState> {
                       <Switch
                         id={this.switchId}
                         labelElement={<label htmlFor={this.switchId}>No End</label>}
-                        onChange={this.toggleNoEnd.bind(this, form, field)}
+                        checked={this.state.isNoEnd}
+                        onChange={this.toggleNoEnd}
                       />
                     </div>
                     <div className="bp3-control" style={{
@@ -157,6 +175,10 @@ export default class DateInput extends Markup<DateInputProps, DateInputState> {
 
 }
 
+const DateInputWrapper = connect((props: DateInputProps & { formik?: FormikContextType<FormikValues> }) => (
+  <DateInput {...props} />
+));
+
 interface StartDateInputProps extends MarkupProps {
   format?: DateFormat,
   max?: Date
@@ -167,7 +189,7 @@ export const StartDateInput = (props: StartDateInputProps): JSX.Element => {
   const start = moment().startOf('day').toDate();
 
   return (
-    <DateInput
+    <DateInputWrapper
       {...props}
       min={start}
     />
@@ -178,10 +200,12 @@ export const StartDateInput = (props: StartDateInputProps): JSX.Element => {
 export const EndDateInput = (props: DateInputProps): JSX.Element => {
 
   return (
-    <DateInput
+    <DateInputWrapper
       {...props}
       isEndDate
     />
   );
 
 };
+
+export default DateInputWrapper;
