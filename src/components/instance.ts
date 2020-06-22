@@ -6,10 +6,7 @@ import {
   FormValues
 } from './types';
 
-const SerializeDate = (value: Date | null, format: string): string | null | undefined => {
-  if (value === undefined) {
-    return undefined;
-  }
+const SerializeDate = (value: Date | null, format: string): string | null => {
   if (value === null) {
     return null;
   }
@@ -17,9 +14,6 @@ const SerializeDate = (value: Date | null, format: string): string | null | unde
 };
 
 const DeserializeDate = (value: string | null, format: string, tz?: string): Date | null | undefined => {
-  if (value === undefined) {
-    return undefined;
-  }
   if (value === null) {
     return null;
   }

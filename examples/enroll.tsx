@@ -18,7 +18,9 @@ import {
   TextInput,
   NumberInput,
   SubmitButton,
-  SwitchInput
+  Switch,
+  Checkbox,
+  CheckboxGroup
 } from '../src/index';
 
 const {
@@ -28,13 +30,22 @@ const {
 
 export type EnrollData = {
   start: Date,
-  end?: Date | null,
-  examAt?: Date | null,
+  end?: Date,
+  examAt?: Date,
   firstName: string,
   lastName: string,
   hasScale: boolean,
-  baselineWeight?: number | null
+  baselineWeight?: number,
+  isLevelA: boolean,
+  isLevelB: boolean,
+  modules: string[],
+  days: number[]
 };
+
+export type SerializedEnrolleData = {
+  [key in keyof EnrollData]: 
+    EnrollData[key] extends Date ? string : EnrollData[key]
+}
 
 const REGEX_NAME = /^[a-zA-Z ]+$/;
 const DATE_FORMAT = 'YYYY-MM-DD';
@@ -54,7 +65,11 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
     firstName: 'John',
     lastName: 'Doe',
     hasScale: false,
-    baselineWeight: null
+    baselineWeight: null,
+    isLevelA: false,
+    isLevelB: false,
+    modules: ['Y'],
+    days: []
   });
 
   const serialize = (data: EnrollData): FormValues => {
@@ -69,15 +84,19 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
     return values;
   };
 
-  const deserialize = (values: FormValues): EnrollData => {
+  const deserialize = (values: SerializedEnrolleData): EnrollData => {
     const data: EnrollData = {
-      start: DeserializeDate(values.start as string, DATE_FORMAT) as Date,
-      end: DeserializeDate(values.end as string, DATE_FORMAT),
-      examAt: DeserializeDate(values.examAt as string, DATE_FORMAT),
-      firstName: values.firstName as string,
-      lastName: values.lastName as string,
-      hasScale: values.hasScale as boolean,
-      baselineWeight: values.baselineWeight as number
+      start: DeserializeDate(values.start, DATE_FORMAT),
+      end: DeserializeDate(values.end, DATE_FORMAT),
+      examAt: DeserializeDate(values.examAt, DATE_FORMAT),
+      firstName: values.firstName,
+      lastName: values.lastName,
+      hasScale: values.hasScale,
+      baselineWeight: values.baselineWeight,
+      isLevelA: values.isLevelA,
+      isLevelB: values.isLevelB,
+      modules: values.modules,
+      days: values.days
     };
     return data;
   };
@@ -86,7 +105,7 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
     if (!data) {
       return;
     }
-    form.setData(deserialize(data));
+    form.setData(deserialize(data as SerializedEnrolleData));
   }, [JSON.stringify(data)]);
 
   const validate = (values: FormData): FormErrors => {
@@ -139,7 +158,7 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
               pattern={REGEX_NAME}
               required
             />
-            <SwitchInput
+            <Switch
               label="Has Scale"
               name="hasScale"
             />
@@ -151,6 +170,61 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
                 required
               />
             )}
+            <Checkbox
+              label="Level A"
+              name="isLevelA"
+            />
+            {props.values.isLevelA && (
+              <Checkbox
+                label="Level B"
+                name="isLevelB"
+              />
+            )}
+            <CheckboxGroup
+              label="Modules"
+              name="modules"
+              options={[{
+                label: 'Module X',
+                value: 'X'
+              }, {
+                label: 'Module Y',
+                value: 'Y'
+              }, {
+                label: 'Module Z',
+                value: 'Z'
+              }]}
+              inline
+            />
+            <CheckboxGroup
+              label="Pick 2-3 Days of Week"
+              name="days"
+              options={[{
+                label: 'Sunday',
+                value: 0
+              }, {
+                label: 'Monday',
+                value: 1
+              }, {
+                label: 'Tuesday',
+                value: 2
+              }, {
+                label: 'Wednesday',
+                value: 3
+              }, {
+                label: 'Thursday',
+                value: 4
+              }, {
+                label: 'Friday',
+                value: 5
+              }, {
+                label: 'Saturday',
+                value: 6
+              }]}
+              isNumeric
+              inline
+              minItems={2}
+              maxItems={3}
+            />
             <br />
             <SubmitButton>
               Get Data

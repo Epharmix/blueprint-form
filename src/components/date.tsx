@@ -42,7 +42,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
     return;
   }
 
-  componentDidUpdate(props: DateInputProps & { formik?: FormikContextType<FormikValues> }, state: DateInputState) {
+  public componentDidUpdate(props: DateInputProps & { formik?: FormikContextType<FormikValues> }, state: DateInputState) {
     if (this.props.isEndDate && this.props.formik) {
       const { values } = this.props.formik;
       if (!(!state.isNoEnd && this.state.isNoEnd)) {

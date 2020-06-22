@@ -25,7 +25,7 @@ export abstract class Markup<P extends MarkupProps, S = unknown> extends Compone
     this.label = props.label;
     this.name = props.name;
     this.required = props.required;
-    this.id = uid(16);
+    this.id = Markup.getID();
   }
 
   protected _validate(value: FormFieldValue): FormError {
@@ -39,5 +39,7 @@ export abstract class Markup<P extends MarkupProps, S = unknown> extends Compone
   }
 
   public abstract render(): JSX.Element;
+
+  static getID = (): string => uid(16);
 
 }
