@@ -10,7 +10,8 @@ import { MarkupType, Option } from './types';
 import { MarkupProps, Markup } from './markup';
 
 export interface SelectInputProps extends MarkupProps {
-  options: Option[]
+  options: Option[],
+  validate?: never
 }
 
 export default class SelectInput extends Markup<SelectInputProps> {
@@ -23,20 +24,23 @@ export default class SelectInput extends Markup<SelectInputProps> {
 
   public render(): JSX.Element {
     return (
-      <Field name={this.name}>
+      <Field name={this.props.name}>
         {({ field, meta }) => (
           <FormGroup
-            label={this.label}
+            label={this.props.label}
             labelFor={this.id}
-            labelInfo={this.required ? '(required)' : ''}
+            labelInfo={this.props.required ? '(required)' : ''}
             intent={meta.error && meta.touched ? 'danger' : 'none'}
             helperText={meta.touched ? meta.error : null}
           >
             <HTMLSelect
+              className={this.props.className}
+              style={this.props.style}
               fill={this.props.fill}
               id={this.id}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
               options={this.props.options}
+              disabled={this.props.disabled}
               {...field}
             />
           </FormGroup>

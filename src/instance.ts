@@ -3,8 +3,8 @@ import moment from 'moment-timezone';
 
 import { 
   FormFieldValue,
-  FormValues
-} from './types';
+  FormErrors
+} from './components/types';
 
 const SerializeDate = (value: Date | null, format: string): string | null => {
   if (value === null) {
@@ -21,7 +21,7 @@ const DeserializeDate = (value: string | null, format: string, tz?: string): Dat
   return moment.tz(value, format, tz).toDate();
 };
 
-export default class FormInstance<T extends {[key in keyof T]: FormFieldValue | FormValues}> {
+export default class FormInstance<T extends {[key in keyof T]: FormFieldValue}> {
 
   protected form: FormikProps<T> | null;
   public readonly initialData: T | null;
@@ -37,6 +37,14 @@ export default class FormInstance<T extends {[key in keyof T]: FormFieldValue | 
 
   public setData(data: T): void {
     this.form?.setValues(data);
+  }
+
+  public submit(): Promise<void> {
+    return this.form?.submitForm();
+  }
+
+  public validate(): Promise<FormErrors> {
+    return this.form?.validateForm();
   }
 
   // Expose serialization methods

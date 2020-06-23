@@ -11,7 +11,8 @@ import { MarkupProps, Markup } from './markup';
 
 export interface SwitchInputProps extends MarkupProps {
   innerLabel?: string,
-  innerLabelChecked?: string
+  innerLabelChecked?: string,
+  valdate?: never
 }
 
 export default class SwitchInput extends Markup<SwitchInputProps> {
@@ -24,17 +25,20 @@ export default class SwitchInput extends Markup<SwitchInputProps> {
 
   public render(): JSX.Element {
     return (
-      <Field name={this.name} type="checkbox">
+      <Field name={this.props.name} type="checkbox">
         {({ field }) => (
           <Switch
+            className={this.props.className}
+            style={this.props.style}
             id={this.id}
-            labelElement={<label htmlFor={this.id}>{this.label}</label>}
+            labelElement={<label htmlFor={this.id}>{this.props.label}</label>}
             checked={field.checked}
             name={field.name}
             onChange={field.onChange}
             onBlur={field.onBlur}
             innerLabel={this.props.innerLabel}
             innerLabelChecked={this.props.innerLabelChecked}
+            disabled={this.props.disabled}
           />
         )}
       </Field>

@@ -33,21 +33,26 @@ export default class TextInput extends Markup<NumberInputProps> {
         error = `The number cannot be greater than ${this.props.max}!`;
       }
     }
+    if (!error && this.props.validate) {
+      error = this.props.validate(value);
+    }
     return error;
   }
 
   public render(): JSX.Element {
     return (
-      <Field name={this.name} validate={this.validate}>
+      <Field name={this.props.name} validate={this.validate}>
         {({ field, form, meta }) => (
           <FormGroup
-            label={this.label}
+            label={this.props.label}
             labelFor={this.id}
-            labelInfo={this.required ? '(required)' : ''}
+            labelInfo={this.props.required ? '(required)' : ''}
             intent={meta.error && meta.touched ? 'danger' : 'none'}
             helperText={meta.touched ? meta.error : null}
           >
             <NumericInput
+              className={this.props.className}
+              style={this.props.style}
               fill={this.props.fill}
               id={this.id}
               name={field.name}
@@ -66,6 +71,7 @@ export default class TextInput extends Markup<NumberInputProps> {
                 form.setFieldTouched(field.name);
                 form.setFieldValue(field.name, _value);
               }}
+              disabled={this.props.disabled}
             />
           </FormGroup>
         )}

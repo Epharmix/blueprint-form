@@ -5,9 +5,9 @@
 import React from 'react';
 import { Formik, FormikValues, FormikProps } from 'formik';
 
-import { FormErrors } from './types';
+import { FormErrors } from './components/types';
 import FormInstance from './instance';
-import { isFunction } from '../utils';
+import { isFunction } from './utils';
 
 interface FormProps<Values extends FormikValues> {
   form: FormInstance<Values>,

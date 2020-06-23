@@ -11,7 +11,8 @@ import { MarkupProps, Markup } from './markup';
 
 export interface CheckboxProps extends MarkupProps {
   inline?: boolean,
-  value?: string
+  value?: string,
+  validate?: never
 }
 
 export default class Checkbox extends Markup<CheckboxProps> {
@@ -24,17 +25,18 @@ export default class Checkbox extends Markup<CheckboxProps> {
 
   public render(): JSX.Element {
     return (
-      <Field name={this.name} type="checkbox">
+      <Field name={this.props.name} type="checkbox">
         {({ field }) => (
           <_Checkbox
             id={this.id}
-            labelElement={<label htmlFor={this.id}>{this.label}</label>}
+            labelElement={<label htmlFor={this.id}>{this.props.label}</label>}
             inline={this.props.inline}
             value={this.props.value}
             checked={field.checked}
             name={field.name}
             onChange={field.onChange}
             onBlur={field.onBlur}
+            disabled={this.props.disabled}
           />
         )}
       </Field>
@@ -68,6 +70,9 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
         error = `At most ${this.props.maxItems} ${this.props.maxItems === 1 ? 'item is' : 'items are'} required!`;
       }
     }
+    if (!error && this.props.validate) {
+      error = this.props.validate(value);
+    }
     return error;
   }
 
@@ -80,25 +85,27 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
 
   public render(): JSX.Element {
     return (
-      <Field name={this.name} validate={this.validate}>
+      <Field name={this.props.name} validate={this.validate}>
         {({ field, form, meta }) => (
-          <FieldArray name={this.name} render={(helpers) => (
+          <FieldArray name={this.props.name} render={(helpers) => (
             <FormGroup
-              label={this.label}
+              label={this.props.label}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
               helperText={meta.touched ? meta.error : null}
             >
               {
                 this.props.options.map((option, i) => (
                   <_Checkbox
+                    className={this.props.className}
+                    style={this.props.style}
                     key={i}
                     id={`${this.id}.${i}`}
-                    name={this.name}
+                    name={this.props.name}
                     labelElement={<label htmlFor={`${this.id}.${i}`}>{option.label}</label>}
                     checked={field.value.includes(option.value)}
                     value={String(option.value)}
                     inline={this.props.inline}
-                    disabled={this.isDisabled(option.value, field.value)}
+                    disabled={this.props.disabled || this.isDisabled(option.value, field.value)}
                     onChange={(event: React.FormEvent<HTMLInputElement>) => {
                       const isChecked = event.currentTarget.checked;
                       if (isChecked) {

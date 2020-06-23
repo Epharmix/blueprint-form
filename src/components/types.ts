@@ -1,6 +1,6 @@
 import { FormikErrors, FormikValues } from 'formik';
 
-export type FormFieldValue = undefined | null | string | boolean | number | Date | FormFieldValue[] | FormData;
+export type FormFieldValue = undefined | null | string | boolean | number | Date | FormFieldValue[] | FormValues;
 export interface FormValues {
   [field: string]: FormFieldValue | FormValues
 }
@@ -10,6 +10,7 @@ export type FormErrors = FormikErrors<FormikValues>;
 
 export enum MarkupType {
   Text = 'text',
+  TextArea = 'textarea',
   Number = 'number',
   Switch = 'switch',
   Select = 'select',
@@ -17,6 +18,7 @@ export enum MarkupType {
   CheckboxGroup = 'checkbox_group',
   RadioGroup = 'radio_group',
   Date = 'date',
+  Timezone = 'timezone',
   Submit = 'submit'
 }
 

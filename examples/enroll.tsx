@@ -1,14 +1,19 @@
 
 import moment from 'moment-timezone';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  Card
+  Card,
+  FormGroup,
+  Dialog,
+  Button
 } from '@blueprintjs/core';
 
 import {
   Form,
   FormInstance,
+  Markup,
+  FormError,
   FormErrors,
   FormData,
   FormValues,
@@ -16,14 +21,105 @@ import {
   StartDateInput,
   EndDateInput,
   TextInput,
+  TextArea,
   NumberInput,
   SubmitButton,
   Switch,
   Checkbox,
   CheckboxGroup,
   RadioGroup,
-  SelectInput
+  SelectInput,
+  useField
 } from '../src/index';
+
+/**
+ * Example composite input
+ */
+
+interface CountryInputProps {
+  label?: string,
+  name: string,
+  required?: boolean,
+  disabled?: boolean
+}
+
+const COUNTRIES = ['Water Tribes', 'Earth Kingdom', 'Fire Nation', 'Air Nomads'];
+
+const CountryInput = (props: CountryInputProps) => {
+
+  const [field, meta, helpers] = useField({
+    validate: (country): FormError => {
+      let error: FormError = null;
+      if (!country) {
+        error = 'A valid country selection is required!';
+      }
+      return error;
+    },
+    ...props
+  });
+  const idRef = useRef(Markup.getID());
+  const [isOpen, setIsOpen] = useState(false);
+
+  const _setCountry = (country: string) => {
+    helpers.setTouched(true);
+    helpers.setValue(country);
+    setIsOpen(false);
+  };
+
+  return (
+    <React.Fragment>
+      <FormGroup
+        label={props.label}
+        labelFor={idRef.current}
+        labelInfo={props.required ? '(required)' : ''}
+        intent={meta.error && meta.touched ? 'danger' : 'none'}
+        helperText={meta.touched ? meta.error : null}
+      >
+        <div>
+          <span style={{ marginRight: '15px' }}>
+            Current Selection: <b>{field.value || 'None'}</b>
+          </span>
+          <Button
+            onClick={() => setIsOpen(true)}
+            disabled={props.disabled}
+          >
+            Pick Country
+          </Button>
+        </div>
+        <input
+          id={idRef.current}
+          {...field} 
+          type="hidden"
+          value={field.value || ''}
+        />
+      </FormGroup>
+      <Dialog
+        title="Pick Your Favorite Country"
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
+        <div style={{ padding: '20px' }}>
+          {
+            COUNTRIES.map((country, i) => (
+              <Button
+                key={i} 
+                active={field.value === country}
+                onClick={_setCountry.bind(this, country)}
+                fill
+                style={{
+                  marginTop: '10px'
+                }}
+              >
+                {country}
+              </Button>
+            ))
+          }
+        </div>
+      </Dialog>
+    </React.Fragment>
+  );
+
+};
 
 const {
   SerializeDate,
@@ -34,16 +130,19 @@ export type EnrollData = {
   start: Date,
   end?: Date,
   examAt?: Date,
+  tz: string,
   firstName: string,
   lastName: string,
   hasScale: boolean,
   baselineWeight?: number,
+  description: string,
   isLevelA: boolean,
   isLevelB: boolean,
   modules: string[],
   days: number[],
   dmType: string,
-  color: string
+  color: string,
+  country: string
 };
 
 export type SerializedEnrolleData = {
@@ -56,28 +155,37 @@ const DATE_FORMAT = 'YYYY-MM-DD';
 
 export interface EnrollProps {
   data?: FormValues,
+  isDisabled?: boolean,
   onSubmit: (data: any) => void
 }
 
-const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
+/**
+ * Example form
+ */
+const Enroll = ({ onSubmit, data, isDisabled }: EnrollProps): JSX.Element => {
 
-  // Instantiate the form instance
-  const form = new FormInstance<EnrollData>({
+  // Set the initial data and create the form instance
+  const initialData: EnrollData = {
     start: moment().add(1, 'day').toDate(),
     end: null,
     examAt: null,
+    tz: 'US/Mountain',
     firstName: 'John',
     lastName: 'Doe',
-    hasScale: false,
-    baselineWeight: null,
-    isLevelA: false,
+    hasScale: true,
+    baselineWeight: 123,
+    description: 'Etiam varius neque feugiat elit aliquam venenatis.',
+    isLevelA: true,
     isLevelB: false,
     modules: ['Y'],
     days: [1, 5],
     dmType: 'II',
-    color: 'green'
-  });
+    color: 'green',
+    country: 'Air Nomads'
+  };
+  const form = new FormInstance<EnrollData>(initialData);
 
+  // Some helper methods that do common serializations (e.g. Date -> string)
   const serialize = (data: EnrollData): FormValues => {
     const values: FormValues = {};
     for (const key of Object.keys(data)) {
@@ -100,6 +208,7 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
     return data;
   };
 
+  // Set the passed down data on the form
   useEffect(() => {
     if (!data) {
       return;
@@ -107,6 +216,12 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
     form.setData(deserialize(data as SerializedEnrolleData));
   }, [JSON.stringify(data)]);
 
+  // Pass up the initial data after mount
+  useEffect(() => {
+    onSubmit(serialize(initialData));
+  }, []);
+
+  // Provide form level validation (e.g. validation on 2+ values)
   const validate = (values: FormData): FormErrors => {
     const errors: FormErrors = {};
     if (values.start != null && values.end != null && values.start > values.end) {
@@ -115,6 +230,7 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
     return errors;
   };
 
+  // Serialize the data and pass it up
   const _onSubmit = (data: EnrollData) => {
     const _data = serialize(data);
     onSubmit(_data);
@@ -134,32 +250,38 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
               name="start"
               fill
               required
+              disabled={isDisabled}
             />
             <EndDateInput
               label="End Date"
               name="end"
               fill
+              disabled={isDisabled}
             />
             <DateInput
               label="Exam Date"
               name="examAt"
               fill
+              disabled={isDisabled}
             />
             <TextInput
               label="First Name"
               name="firstName"
               pattern={REGEX_NAME}
               required
+              disabled={isDisabled}
             />
             <TextInput
               label="Last Name"
               name="lastName"
               pattern={REGEX_NAME}
               required
+              disabled={isDisabled}
             />
             <Switch
               label="Has Scale"
               name="hasScale"
+              disabled={isDisabled}
             />
             {props.values.hasScale && (
               <NumberInput
@@ -167,16 +289,26 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
                 name="baselineWeight"
                 fill
                 required
+                disabled={isDisabled}
               />
             )}
+            <TextArea
+              label="Description"
+              name="description"
+              fill
+              growVertically
+              disabled={isDisabled}
+            />
             <Checkbox
               label="Level A"
               name="isLevelA"
+              disabled={isDisabled}
             />
             {props.values.isLevelA && (
               <Checkbox
                 label="Level B"
                 name="isLevelB"
+                disabled={isDisabled}
               />
             )}
             <CheckboxGroup
@@ -193,6 +325,7 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
                 value: 'Z'
               }]}
               inline
+              disabled={isDisabled}
             />
             <CheckboxGroup
               label="Pick 2-3 Days of Week"
@@ -222,6 +355,7 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
               inline
               minItems={2}
               maxItems={3}
+              disabled={isDisabled}
             />
             <RadioGroup
               label="Diabetes Type"
@@ -233,6 +367,7 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
                 label: 'Type II',
                 value: 'II'
               }]}
+              disabled={isDisabled}
             />
             <SelectInput
               label="Favorite Color"
@@ -248,9 +383,17 @@ const Enroll = ({ onSubmit, data }: EnrollProps): JSX.Element => {
                 value: 'green'
               }]}
               fill
+              disabled={isDisabled}
+            />
+            <CountryInput
+              label="Country"
+              name="country"
+              disabled={isDisabled}
             />
             <br />
-            <SubmitButton>
+            <SubmitButton
+              disabled={isDisabled}
+            >
               Get Data
             </SubmitButton>
           </React.Fragment>

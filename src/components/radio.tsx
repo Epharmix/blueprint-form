@@ -11,7 +11,8 @@ import { MarkupProps, Markup } from './markup';
 
 export interface RadioGroupProps extends MarkupProps {
   inline?: boolean,
-  options: Option[]
+  options: Option[],
+  validate?: never
 }
 
 export default class RadioGroup extends Markup<RadioGroupProps> {
@@ -24,18 +25,25 @@ export default class RadioGroup extends Markup<RadioGroupProps> {
 
   public render(): JSX.Element {
     return (
-      <Field name={this.name} type="checkbox">
+      <Field name={this.props.name} type="checkbox">
         {({ field }) => (
           <_RadioGroup
-            label={this.label}
-            name={this.name}
+            className={this.props.className}
+            label={this.props.label}
+            name={this.props.name}
             inline={this.props.inline}
             onChange={field.onChange}
             selectedValue={field.value}
+            disabled={this.props.disabled}
           >
             {
               this.props.options.map((option, i) => (
-                <Radio key={i} label={option.label} value={String(option.value)} />
+                <Radio
+                  style={this.props.style}
+                  key={i}
+                  label={option.label}
+                  value={String(option.value)}
+                />
               ))
             }
           </_RadioGroup>

@@ -9,7 +9,8 @@ import { MarkupType } from './types';
 import { MarkupProps, Markup } from './markup';
 
 interface SubmitButtonProps extends MarkupProps {
-  icon?: JSX.Element
+  icon?: JSX.Element,
+  validate?: never
 }
 
 export default class SubmitButton extends Markup<SubmitButtonProps> {
@@ -22,7 +23,13 @@ export default class SubmitButton extends Markup<SubmitButtonProps> {
 
   public render(): JSX.Element {
     return (
-      <Button type="submit" icon={this.props.icon}>
+      <Button
+        className={this.props.className}
+        style={this.props.style}
+        type="submit"
+        icon={this.props.icon}
+        disabled={this.props.disabled}
+      >
         {this.props.children}
       </Button>
     );

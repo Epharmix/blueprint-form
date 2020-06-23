@@ -45,10 +45,15 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
   public componentDidUpdate(props: DateInputProps & { formik?: FormikContextType<FormikValues> }, state: DateInputState) {
     if (this.props.isEndDate && this.props.formik) {
       const { values } = this.props.formik;
-      if (!(!state.isNoEnd && this.state.isNoEnd)) {
-        if (values[this.name as string] != null && this.state.isNoEnd) {
+      if (state.isNoEnd === this.state.isNoEnd) {
+        const name = this.props.name as string;
+        if (values[name] != null && this.state.isNoEnd) {
           this.setState({
             isNoEnd: false
+          });
+        } else if (values[name] == null && !this.state.isNoEnd) {
+          this.setState({
+            isNoEnd: true
           });
         }
       }
@@ -83,6 +88,9 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
         error = `The date must be on or before ${maxDate}!`;
       }
     }
+    if (!error && this.props.validate) {
+      error = this.props.validate(value);
+    }
     return error;
   }
 
@@ -96,19 +104,19 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
       isNoEnd: isNoEnd
     }, () => {
       if (isNoEnd) {
-        setFieldValue(this.name as string, null);
+        setFieldValue(this.props.name as string, null);
       }
     });
   }
   
   public render(): JSX.Element {
     return (
-      <Field name={this.name} validate={this.validate}>
+      <Field name={this.props.name} validate={this.validate}>
         {({ field, form, meta }) => (
           <FormGroup
-            label={this.label}
+            label={this.props.label}
             labelFor={this.id}
-            labelInfo={this.required ? '(required)' : ''}
+            labelInfo={this.props.required ? '(required)' : ''}
             intent={meta.error && meta.touched ? 'danger' : 'none'}
             helperText={meta.touched ? meta.error : null}
           >
@@ -128,6 +136,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
                         id={this.switchId}
                         labelElement={<label htmlFor={this.switchId}>No End</label>}
                         checked={this.state.isNoEnd}
+                        disabled={this.props.disabled}
                         onChange={this.toggleNoEnd}
                       />
                     </div>
@@ -146,6 +155,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
                 width: '100%'
               }}>
                 <_DateInput
+                  className={this.props.className}
                   fill={this.props.fill || this.props.isEndDate}
                   formatDate={this.formatDate}
                   parseDate={this.parseDate}
@@ -156,6 +166,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
                   inputProps={{
                     id: this.id,
                     name: field.name,
+                    style: this.props.style,
                     intent: meta.error && meta.touched ? 'danger' : 'none'
                   }}
                   value={meta.value}
@@ -163,7 +174,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
                     form.setFieldTouched(field.name);
                     form.setFieldValue(field.name, value);
                   }}
-                  disabled={this.state.isNoEnd}
+                  disabled={this.props.disabled || this.state.isNoEnd}
                 />
               </div>
             </div>

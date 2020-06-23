@@ -15,6 +15,11 @@ const App = () => {
 
   const [rawData, setRawData] = useState('');
   const [formData, setFormData] = useState(undefined);
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const toggleDisabled = () => {
+    setIsDisabled(!isDisabled);
+  };
 
   const onSubmit = (data: any) => {
     setRawData(JSON.stringify(data, null, 2));
@@ -37,43 +42,56 @@ const App = () => {
   };
 
   return (
-    <Card
-      style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}
-    >
-      <div style={{
-        width: '50%'
-      }}>
-        <Enroll
-          data={formData}
-          onSubmit={onSubmit}
-        />
-      </div>
-      <Card className="exclude-axe" style={{
-        width: '50%'
-      }}>
-        <Editor
-          highlight={value => highlight(value, languages.json)}
-          value={rawData}
-          onValueChange={(value) => setRawData(value)}
-          tabSize={2}
-          insertSpaces={true}
-          style={{
-            minHeight: '150px',
-            backgroundColor: '#1E1E1E',
-            caretColor: '#FFF',
-            color: '#FFF'
-          }}
-          padding={20}
-        />
-        <br />
-        <Button onClick={setData}>
-          Set Data
-        </Button>
+    <div style={{ padding: '0 20px' }}>
+      <h1>Weaver Form Example</h1>
+      <Card
+        style={{
+          display: 'flex',
+          flexDirection: 'row'
+        }}
+      >
+        <div style={{
+          width: '50%'
+        }}>
+          <Enroll
+            data={formData}
+            isDisabled={isDisabled}
+            onSubmit={onSubmit}
+          />
+        </div>
+        <Card className="exclude-axe" style={{
+          marginLeft: '20px',
+          width: '50%'
+        }}>
+          <Editor
+            highlight={value => highlight(value, languages.json)}
+            value={rawData}
+            onValueChange={(value) => setRawData(value)}
+            tabSize={2}
+            insertSpaces={true}
+            style={{
+              minHeight: '150px',
+              backgroundColor: '#1E1E1E',
+              caretColor: '#FFF',
+              color: '#FFF'
+            }}
+            padding={20}
+          />
+          <br />
+          <Button
+            style={{
+              marginRight: '10px'
+            }}
+            onClick={setData}
+          >
+            Set Data
+          </Button>
+          <Button onClick={toggleDisabled}>
+            Toggle Disabled
+          </Button>
+        </Card>
       </Card>
-    </Card>
+    </div>
   );
 
 };
