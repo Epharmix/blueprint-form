@@ -70,7 +70,7 @@ module.exports = merge.smartStrategy({
   },
   plugins: [
     new DTSBundleWebpack({
-      name: 'weaver',
+      name: 'blueprint-form',
       baseDir: 'dist',
       main: 'dist/index.d.ts',
       out: 'index.d.ts',
