@@ -11,7 +11,8 @@
   "scripts": {
     "build": "webpack --config ./webpack.prod.js --mode production",
     "dev": "webpack-dev-server",
-    "watch": "webpack --config ./webpack.config.js --mode development"
+    "watch": "webpack --config ./webpack.config.js --mode development",
+    "publish": "npm run build && npm publish"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
