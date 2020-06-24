@@ -1,6 +1,6 @@
-# Weaver
+# blueprint-form
 
-A form composition library for [Blueprint](https://blueprintjs.com/).
+A form composition library for [BlueprintJS](https://blueprintjs.com/).
 
 ### Installation
 

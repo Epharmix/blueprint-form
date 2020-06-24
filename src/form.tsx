@@ -16,7 +16,7 @@ interface FormProps<Values extends FormikValues> {
   onSubmit: (data: any) => void
 }
 
-const WeaverForm = <Values extends FormikValues>({form: instance, validate, children, onSubmit}: FormProps<Values>): JSX.Element => {
+const Form = <Values extends FormikValues>({form: instance, validate, children, onSubmit}: FormProps<Values>): JSX.Element => {
 
   return (
     <Formik
@@ -46,4 +46,4 @@ const WeaverForm = <Values extends FormikValues>({form: instance, validate, chil
 
 };
 
-export default WeaverForm;
+export default Form;

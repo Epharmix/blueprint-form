@@ -1,18 +1,20 @@
 {
-  "name": "weaver",
-  "description": "An antd form composition layer.",
+  "name": "blueprint-form",
+  "description": "A form composition layer for BlueprintJS using Formik.",
   "version": "1.0.0",
   "author": "Evan Huang <evan.huang@caresignal.health>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Epharmix/weaver.git"
+    "url": "git+https://github.com/Epharmix/blueprint-form.git"
   },
   "scripts": {
     "build": "webpack --config ./webpack.prod.js --mode production",
     "dev": "webpack-dev-server",
     "watch": "webpack --config ./webpack.config.js --mode development"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "formik": "~2.1.4",
     "uid": "~1.0.0"
