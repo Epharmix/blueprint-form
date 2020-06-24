@@ -4,7 +4,7 @@
 
 import uid from 'uid';
 
-import { Component } from 'react';
+import React, { Component } from 'react';
 
 import { MarkupType, FormFieldValue, FormError } from './types';
 

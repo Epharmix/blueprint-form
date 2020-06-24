@@ -1,4 +1,5 @@
 node_modules
 public/app.js
+dist/*
 yarn.lock
 *.log

@@ -1,6 +1,6 @@
 # Weaver
 
-An Ant Design form composition library.
+A form composition library for [Blueprint](https://blueprintjs.com/).
 
 ### Installation
 
