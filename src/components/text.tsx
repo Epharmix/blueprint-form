@@ -11,6 +11,12 @@ import { MarkupProps, Markup } from './markup';
 
 export interface TextInputProps extends MarkupProps {
   type?: string,
+  round?: boolean,
+  small?: boolean,
+  leftIcon?: string,
+  leftElement?: JSX.Element,
+  rightElement?: JSX.Element,
+  placeholder?: string,
   pattern?: RegExp,
   patternError?: string
 }
@@ -51,9 +57,14 @@ export default class TextInput extends Markup<TextInputProps> {
             <InputGroup 
               className={this.props.className}
               style={this.props.style}
-              id={this.id}
               fill={this.props.fill}
               large={this.props.large}
+              small={this.props.small}
+              leftIcon={this.props.leftIcon}
+              leftElement={this.props.leftElement}
+              rightElement={this.props.rightElement}
+              placeholder={this.props.placeholder}
+              id={this.id}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
               disabled={this.props.disabled}
               type={this.props.type}

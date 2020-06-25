@@ -13,7 +13,7 @@ import { Switch } from '@blueprintjs/core';
 type DateFormat = 'YYYY-MM-DD' | 'MM/DD/YYYY';
 const DEFAULT_FORMAT = 'MM/DD/YYYY';
 
-interface DateInputProps extends MarkupProps {
+export interface DateInputProps extends MarkupProps {
   format?: DateFormat,
   min?: Date,
   max?: Date,
@@ -195,7 +195,7 @@ const DateInputWrapper = connect((props: DateInputProps & { formik?: FormikConte
   <DateInput {...props} />
 ));
 
-interface StartDateInputProps extends MarkupProps {
+export interface StartDateInputProps extends MarkupProps {
   format?: DateFormat,
   max?: Date
 }

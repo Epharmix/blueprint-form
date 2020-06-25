@@ -48,7 +48,7 @@ const App = () => {
 
   return (
     <div style={{ padding: '0 20px' }}>
-      <h1>Weaver Form Example</h1>
+      <h1>Blueprint Form Example</h1>
       <Card
         style={{
           display: 'flex',

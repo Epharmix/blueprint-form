@@ -48,7 +48,7 @@ const COUNTRIES = ['Water Tribes', 'Earth Kingdom', 'Fire Nation', 'Air Nomads']
 
 const CountryInput = (props: CountryInputProps) => {
 
-  const [field, meta, helpers] = useField({
+  const [field, meta, helpers] = useField<string>({
     validate: (country): FormError => {
       let error: FormError = null;
       if (!country) {
@@ -128,7 +128,7 @@ const {
   DeserializeDate
 } = FormInstance;
 
-export type EnrollData = {
+export interface EnrollData {
   start: Date,
   end?: Date,
   examAt?: Date,
@@ -146,7 +146,7 @@ export type EnrollData = {
   dmType: string,
   color: string,
   country: string
-};
+}
 
 export type SerializedEnrolleData = {
   [key in keyof EnrollData]: 

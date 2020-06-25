@@ -8,11 +8,13 @@ import { Button, IButtonProps } from '@blueprintjs/core';
 import { MarkupType } from './types';
 import { MarkupProps, Markup } from './markup';
 
-interface SubmitButtonProps extends MarkupProps {
+interface _SubmitButtonProps extends MarkupProps {
   validate?: never
 }
 
-export default class SubmitButton extends Markup<SubmitButtonProps & IButtonProps> {
+export type SubmitButtonProps = _SubmitButtonProps & IButtonProps;
+
+export default class SubmitButton extends Markup<SubmitButtonProps> {
   
   public readonly type: MarkupType = MarkupType.Submit;
 
