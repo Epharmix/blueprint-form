@@ -79,11 +79,11 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
   private validate(value: Date | null): FormError {
     let error = this._validate(value);
     if (!error && value != null) {
-      if (this.props.min && value < this.props.min) {
+      if (this.props.min && moment(value).startOf('day') < moment(this.props.min).startOf('day')) {
         const minDate = moment(this.props.min).format(DEFAULT_FORMAT);
         error = `The date must be on or after ${minDate}!`;
       }
-      if (this.props.max && value > this.props.max) {
+      if (this.props.max && moment(value).startOf('day') > moment(this.props.max).startOf('day')) {
         const maxDate =  moment(this.props.max).format(DEFAULT_FORMAT);
         error = `The date must be on or before ${maxDate}!`;
       }
@@ -165,8 +165,10 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
                   parseDate={this.parseDate}
                   placeholder={this.props.format || DEFAULT_FORMAT}
                   showActionsBar
+                  canClearSelection={false}
                   minDate={this.props.min}
                   maxDate={this.props.max}
+                  initialMonth={this.props.min || new Date()}
                   inputProps={{
                     id: this.id,
                     name: field.name,

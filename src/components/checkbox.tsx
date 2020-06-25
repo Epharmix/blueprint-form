@@ -93,7 +93,7 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
   public render(): JSX.Element {
     return (
       <Field name={this.props.name} validate={this.validate}>
-        {({ field, meta }) => (
+        {({ field, form, meta }) => (
           <FieldArray name={this.props.name} render={(helpers) => (
             <FormGroup
               label={this.props.label}
@@ -121,6 +121,7 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
                       } else {
                         helpers.remove(field.value.indexOf(option.value));
                       }
+                      form.setFieldTouched(field.name, true, false);
                     }}
                   />
                 ))

@@ -182,7 +182,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     description: 'Etiam varius neque feugiat elit aliquam venenatis.',
     isLevelA: true,
     isLevelB: false,
-    modules: ['Y'],
+    modules: [],
     days: [1, 5],
     dmType: 'II',
     color: 'green',
@@ -229,7 +229,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
   // Provide form level validation (e.g. validation on 2+ values)
   const validate = (values: FormData): FormErrors => {
     const errors: FormErrors = {};
-    if (values.start != null && values.end != null && values.start > values.end) {
+    if (values.start != null && values.end != null && moment(values.start).startOf('day') > moment(values.end).startOf('day')) {
       errors.end = 'The end date must be after the start date!';
     }
     return errors;
@@ -262,6 +262,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               label="End Date"
               name="end"
               fill
+              min={props.values.start}
               large={isLarge}
               disabled={isDisabled}
             />
@@ -344,6 +345,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 label: 'Module Z',
                 value: 'Z'
               }]}
+              minItems={1}
               inline
               large={isLarge}
               disabled={isDisabled}
