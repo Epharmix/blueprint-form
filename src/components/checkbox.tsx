@@ -31,6 +31,7 @@ export default class Checkbox extends Markup<CheckboxProps> {
             id={this.id}
             labelElement={<label htmlFor={this.id}>{this.props.label}</label>}
             inline={this.props.inline}
+            large={this.props.large}
             value={this.props.value}
             checked={field.checked}
             name={field.name}
@@ -105,6 +106,7 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
                     checked={field.value.includes(option.value)}
                     value={String(option.value)}
                     inline={this.props.inline}
+                    large={this.props.large}
                     disabled={this.props.disabled || this.isDisabled(option.value, field.value)}
                     onChange={(event: React.FormEvent<HTMLInputElement>) => {
                       const isChecked = event.currentTarget.checked;

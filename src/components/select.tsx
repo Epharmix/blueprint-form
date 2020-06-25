@@ -37,6 +37,7 @@ export default class SelectInput extends Markup<SelectInputProps> {
               className={this.props.className}
               style={this.props.style}
               fill={this.props.fill}
+              large={this.props.large}
               id={this.id}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
               options={this.props.options}

@@ -16,9 +16,14 @@ const App = () => {
   const [rawData, setRawData] = useState('');
   const [formData, setFormData] = useState(undefined);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isLarge, setIsLarge] = useState(false);
 
   const toggleDisabled = () => {
     setIsDisabled(!isDisabled);
+  };
+
+  const toggleLarge = () => {
+    setIsLarge(!isLarge);
   };
 
   const onSubmit = (data: any) => {
@@ -56,6 +61,7 @@ const App = () => {
           <Enroll
             data={formData}
             isDisabled={isDisabled}
+            isLarge={isLarge}
             onSubmit={onSubmit}
           />
         </div>
@@ -86,8 +92,16 @@ const App = () => {
           >
             Set Data
           </Button>
-          <Button onClick={toggleDisabled}>
+          <Button
+            style={{
+              marginRight: '10px'
+            }}
+            onClick={toggleDisabled}
+          >
             Toggle Disabled
+          </Button>
+          <Button onClick={toggleLarge}>
+            Toggle Small/Large
           </Button>
         </Card>
       </Card>

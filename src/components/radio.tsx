@@ -40,6 +40,7 @@ export default class RadioGroup extends Markup<RadioGroupProps> {
               this.props.options.map((option, i) => (
                 <Radio
                   style={this.props.style}
+                  large={this.props.large}
                   key={i}
                   label={option.label}
                   value={String(option.value)}

@@ -27,7 +27,7 @@ export default class TextInput extends Markup<TextInputProps> {
     let error = this._validate(value);
     if (!error && value != null) {
       if (this.props.pattern && !this.props.pattern.test(value)) {
-        error = 'This is not in valid format!';
+        error = this.props.patternError || 'This is not in valid format!';
       }
     }
     if (!error && this.props.validate) {
@@ -52,6 +52,7 @@ export default class TextInput extends Markup<TextInputProps> {
               style={this.props.style}
               id={this.id}
               fill={this.props.fill}
+              large={this.props.large}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
               disabled={this.props.disabled}
               {...field} 
@@ -109,6 +110,7 @@ export class TextArea extends Markup<TextAreaProps> {
               }, this.props.style)}
               id={this.id}
               fill={this.props.fill}
+              large={this.props.large}
               growVertically={this.props.growVertically}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
               disabled={this.props.disabled}

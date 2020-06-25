@@ -3,17 +3,16 @@
  */
 
 import React from 'react';
-import { Button } from '@blueprintjs/core';
+import { Button, IButtonProps } from '@blueprintjs/core';
 
 import { MarkupType } from './types';
 import { MarkupProps, Markup } from './markup';
 
 interface SubmitButtonProps extends MarkupProps {
-  icon?: JSX.Element,
   validate?: never
 }
 
-export default class SubmitButton extends Markup<SubmitButtonProps> {
+export default class SubmitButton extends Markup<SubmitButtonProps & IButtonProps> {
   
   public readonly type: MarkupType = MarkupType.Submit;
 
@@ -24,10 +23,10 @@ export default class SubmitButton extends Markup<SubmitButtonProps> {
   public render(): JSX.Element {
     return (
       <Button
+        {...this.props}
         className={this.props.className}
         style={this.props.style}
         type="submit"
-        icon={this.props.icon}
         disabled={this.props.disabled}
       >
         {this.props.children}

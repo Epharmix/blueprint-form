@@ -40,6 +40,7 @@ interface CountryInputProps {
   label?: string,
   name: string,
   required?: boolean,
+  large?: boolean,
   disabled?: boolean
 }
 
@@ -76,12 +77,13 @@ const CountryInput = (props: CountryInputProps) => {
         helperText={meta.touched ? meta.error : null}
       >
         <div>
-          <span style={{ marginRight: '15px' }}>
+          <span className={props.large ? 'bp3-text-large' : ''} style={{ marginRight: '15px' }}>
             Current Selection: <b>{field.value || 'None'}</b>
           </span>
           <Button
             onClick={() => setIsOpen(true)}
             disabled={props.disabled}
+            large={props.large}
           >
             Pick Country
           </Button>
@@ -156,13 +158,14 @@ const DATE_FORMAT = 'YYYY-MM-DD';
 export interface EnrollProps {
   data?: FormValues,
   isDisabled?: boolean,
+  isLarge?: boolean,
   onSubmit: (data: any) => void
 }
 
 /**
  * Example form
  */
-const Enroll = ({ onSubmit, data, isDisabled }: EnrollProps): JSX.Element => {
+const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Element => {
 
   // Set the initial data and create the form instance
   const initialData: EnrollData = {
@@ -250,18 +253,21 @@ const Enroll = ({ onSubmit, data, isDisabled }: EnrollProps): JSX.Element => {
               name="start"
               fill
               required
+              large={isLarge}
               disabled={isDisabled}
             />
             <EndDateInput
               label="End Date"
               name="end"
               fill
+              large={isLarge}
               disabled={isDisabled}
             />
             <DateInput
               label="Exam Date"
               name="examAt"
               fill
+              large={isLarge}
               disabled={isDisabled}
             />
             <TextInput
@@ -269,18 +275,20 @@ const Enroll = ({ onSubmit, data, isDisabled }: EnrollProps): JSX.Element => {
               name="firstName"
               pattern={REGEX_NAME}
               required
+              large={isLarge}
               disabled={isDisabled}
             />
             <TextInput
               label="Last Name"
               name="lastName"
-              pattern={REGEX_NAME}
               required
+              large={isLarge}
               disabled={isDisabled}
             />
             <Switch
               label="Has Scale"
               name="hasScale"
+              large={isLarge}
               disabled={isDisabled}
             />
             {props.values.hasScale && (
@@ -289,6 +297,7 @@ const Enroll = ({ onSubmit, data, isDisabled }: EnrollProps): JSX.Element => {
                 name="baselineWeight"
                 fill
                 required
+                large={isLarge}
                 disabled={isDisabled}
               />
             )}
@@ -302,12 +311,14 @@ const Enroll = ({ onSubmit, data, isDisabled }: EnrollProps): JSX.Element => {
             <Checkbox
               label="Level A"
               name="isLevelA"
+              large={isLarge}
               disabled={isDisabled}
             />
             {props.values.isLevelA && (
               <Checkbox
                 label="Level B"
                 name="isLevelB"
+                large={isLarge}
                 disabled={isDisabled}
               />
             )}
@@ -325,6 +336,7 @@ const Enroll = ({ onSubmit, data, isDisabled }: EnrollProps): JSX.Element => {
                 value: 'Z'
               }]}
               inline
+              large={isLarge}
               disabled={isDisabled}
             />
             <CheckboxGroup
@@ -355,6 +367,7 @@ const Enroll = ({ onSubmit, data, isDisabled }: EnrollProps): JSX.Element => {
               inline
               minItems={2}
               maxItems={3}
+              large={isLarge}
               disabled={isDisabled}
             />
             <RadioGroup
@@ -367,6 +380,7 @@ const Enroll = ({ onSubmit, data, isDisabled }: EnrollProps): JSX.Element => {
                 label: 'Type II',
                 value: 'II'
               }]}
+              large={isLarge}
               disabled={isDisabled}
             />
             <SelectInput
@@ -383,15 +397,18 @@ const Enroll = ({ onSubmit, data, isDisabled }: EnrollProps): JSX.Element => {
                 value: 'green'
               }]}
               fill
+              large={isLarge}
               disabled={isDisabled}
             />
             <CountryInput
               label="Country"
               name="country"
+              large={isLarge}
               disabled={isDisabled}
             />
             <br />
             <SubmitButton
+              large={isLarge}
               disabled={isDisabled}
             >
               Get Data

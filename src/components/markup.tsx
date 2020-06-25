@@ -14,6 +14,7 @@ export interface MarkupProps {
   label?: string,
   name?: string,
   fill?: boolean,
+  large?: boolean,
   required?: boolean,
   disabled?: boolean,
   validate?: (value: any) => FormError
@@ -34,7 +35,7 @@ export abstract class Markup<P extends MarkupProps, S = unknown> extends Compone
   protected _validate(value: FormFieldValue): FormError {
     let error: FormError = null;
     if (this.props.required) {
-      if (value == null) {
+      if (value == null || value === '') {
         error = 'This field is required!';
       }
     }

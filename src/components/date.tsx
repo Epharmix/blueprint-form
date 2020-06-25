@@ -135,17 +135,21 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
                       <Switch
                         id={this.switchId}
                         labelElement={<label htmlFor={this.switchId}>No End</label>}
+                        large={this.props.large}
                         checked={this.state.isNoEnd}
                         disabled={this.props.disabled}
                         onChange={this.toggleNoEnd}
                       />
                     </div>
-                    <div className="bp3-control" style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: '110px',
-                      paddingLeft: 0
-                    }}>
+                    <div 
+                      className={`bp3-control ${this.props.large ? 'bp3-text-large' : ''}`} 
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: '110px',
+                        paddingLeft: 0
+                      }}
+                    >
                       OR
                     </div>
                   </React.Fragment>
@@ -167,7 +171,8 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
                     id: this.id,
                     name: field.name,
                     style: this.props.style,
-                    intent: meta.error && meta.touched ? 'danger' : 'none'
+                    large: this.props.large,
+                    intent: meta.error && meta.touched ? 'danger' : 'none',
                   }}
                   value={meta.value}
                   onChange={(value: Date) => {

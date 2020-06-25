@@ -54,6 +54,7 @@ export default class TextInput extends Markup<NumberInputProps> {
               className={this.props.className}
               style={this.props.style}
               fill={this.props.fill}
+              large={this.props.large}
               id={this.id}
               name={field.name}
               min={this.props.min}

@@ -30,6 +30,7 @@ export default class SwitchInput extends Markup<SwitchInputProps> {
           <Switch
             className={this.props.className}
             style={this.props.style}
+            large={this.props.large}
             id={this.id}
             labelElement={<label htmlFor={this.id}>{this.props.label}</label>}
             checked={field.checked}
