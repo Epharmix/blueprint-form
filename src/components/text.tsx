@@ -10,6 +10,7 @@ import { MarkupType, FormError } from './types';
 import { MarkupProps, Markup } from './markup';
 
 export interface TextInputProps extends MarkupProps {
+  type?: string,
   pattern?: RegExp,
   patternError?: string
 }
@@ -55,6 +56,7 @@ export default class TextInput extends Markup<TextInputProps> {
               large={this.props.large}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
               disabled={this.props.disabled}
+              type={this.props.type}
               {...field} 
             />
           </FormGroup>
@@ -67,6 +69,7 @@ export default class TextInput extends Markup<TextInputProps> {
 
 export interface TextAreaProps extends MarkupProps {
   pattern?: RegExp,
+  patternError?: string
   growVertically?: boolean
 }
 
@@ -83,7 +86,7 @@ export class TextArea extends Markup<TextAreaProps> {
     let error = this._validate(value);
     if (!error && value != null) {
       if (this.props.pattern && !this.props.pattern.test(value)) {
-        error = 'This is not in valid format!';
+        error = this.props.patternError || 'This is not in valid format!';
       }
     }
     if (!error && this.props.validate) {

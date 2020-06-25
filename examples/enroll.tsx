@@ -135,6 +135,7 @@ export type EnrollData = {
   tz: string,
   firstName: string,
   lastName: string,
+  pin: string,
   hasScale: boolean,
   baselineWeight?: number,
   description: string,
@@ -175,6 +176,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     tz: 'US/Mountain',
     firstName: 'John',
     lastName: 'Doe',
+    pin: '123',
     hasScale: true,
     baselineWeight: 123,
     description: 'Etiam varius neque feugiat elit aliquam venenatis.',
@@ -282,6 +284,13 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               label="Last Name"
               name="lastName"
               required
+              large={isLarge}
+              disabled={isDisabled}
+            />
+            <TextInput
+              label="PIN"
+              name="pin"
+              type="password"
               large={isLarge}
               disabled={isDisabled}
             />
