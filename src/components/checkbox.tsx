@@ -49,6 +49,7 @@ export default class Checkbox extends Markup<CheckboxProps> {
 export interface CheckboxGroupProps extends MarkupProps {
   inline?: boolean,
   options: Option[],
+  numItems?: number,
   minItems?: number,
   maxItems?: number
 }
@@ -63,12 +64,15 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
   }
 
   private validate(value: string[] | number[] | null): FormError {
+    const { numItems, minItems, maxItems } = this.props;
     let error = this._validate(value);
     if (!error && value != null) {
-      if (this.props.minItems && value.length < this.props.minItems) {
-        error = `At least ${this.props.minItems} ${this.props.minItems === 1 ? 'item is' : 'items are'} required!`;
-      } else if (this.props.maxItems && value.length > this.props.maxItems) {
-        error = `At most ${this.props.maxItems} ${this.props.maxItems === 1 ? 'item is' : 'items are'} required!`;
+      if (numItems && value.length !== numItems) {
+        error = `Exactly ${numItems} ${numItems === 1 ? 'item is' : 'items are'} needed!`;
+      } else if (minItems && value.length < minItems) {
+        error = `At least ${minItems} ${minItems === 1 ? 'item is' : 'items are'} needed!`;
+      } else if (maxItems && value.length > maxItems) {
+        error = `At most ${maxItems} ${maxItems === 1 ? 'item is' : 'items are'} needed!`;
       }
     }
     if (!error && this.props.validate) {
@@ -78,16 +82,18 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
   }
 
   private isDisabled(value: any, values: any[]): boolean {
-    if (this.props.maxItems == null) {
+    const { numItems, maxItems } = this.props;
+    const limit = numItems || maxItems;
+    if (limit == null) {
       return false;
     }
-    return values.length >= this.props.maxItems && !values.includes(value);
+    return values.length >= limit && !values.includes(value);
   }
 
   public render(): JSX.Element {
     return (
       <Field name={this.props.name} validate={this.validate}>
-        {({ field, form, meta }) => (
+        {({ field, meta }) => (
           <FieldArray name={this.props.name} render={(helpers) => (
             <FormGroup
               label={this.props.label}
@@ -115,7 +121,6 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
                       } else {
                         helpers.remove(field.value.indexOf(option.value));
                       }
-                      form.setFieldTouched(field.name);
                     }}
                   />
                 ))
