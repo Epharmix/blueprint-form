@@ -1,4 +1,4 @@
-import { useField } from 'formik';
+import { useField, useFormikContext as useFormContext, connect } from 'formik';
 
 import Form from './form';
 import FormInstance from './instance';
@@ -62,5 +62,8 @@ export {
   CheckboxGroup,
   RadioGroup,
   SubmitButton,
-  useField
+  // Expose formik hooks
+  useField,
+  useFormContext,
+  connect
 };

@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { Field, FieldArray } from 'formik';
+import { Field } from 'formik';
 import { FormGroup, Checkbox as _Checkbox } from '@blueprintjs/core';
 
 import { MarkupType, Option, FormError } from './types';
@@ -94,41 +94,40 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
     return (
       <Field name={this.props.name} validate={this.validate}>
         {({ field, form, meta }) => (
-          <FieldArray name={this.props.name} render={(helpers) => (
-            <FormGroup
-              label={this.props.label}
-              intent={meta.error && meta.touched ? 'danger' : 'none'}
-              helperText={meta.touched ? meta.error : null}
-            >
-              {
-                this.props.options.map((option, i) => (
-                  <_Checkbox
-                    className={this.props.className}
-                    style={this.props.style}
-                    key={i}
-                    id={`${this.id}.${i}`}
-                    name={this.props.name}
-                    labelElement={<label htmlFor={`${this.id}.${i}`}>{option.label}</label>}
-                    checked={field.value.includes(option.value)}
-                    value={String(option.value)}
-                    inline={this.props.inline}
-                    large={this.props.large}
-                    disabled={this.props.disabled || this.isDisabled(option.value, field.value)}
-                    onChange={(event: React.FormEvent<HTMLInputElement>) => {
-                      const isChecked = event.currentTarget.checked;
-                      if (isChecked) {
-                        helpers.push(option.value);
-                      } else {
-                        helpers.remove(field.value.indexOf(option.value));
-                      }
-                      form.setFieldTouched(field.name, true, false);
-                    }}
-                  />
-                ))
-              }
-            </FormGroup>
-          )
-          }/>
+          <FormGroup
+            label={this.props.label}
+            intent={meta.error && meta.touched ? 'danger' : 'none'}
+            helperText={meta.touched ? meta.error : null}
+          >
+            {
+              this.props.options.map((option, i) => (
+                <_Checkbox
+                  className={this.props.className}
+                  style={this.props.style}
+                  key={i}
+                  id={`${this.id}.${i}`}
+                  name={this.props.name}
+                  labelElement={<label htmlFor={`${this.id}.${i}`}>{option.label}</label>}
+                  checked={field.value.includes(option.value)}
+                  value={String(option.value)}
+                  inline={this.props.inline}
+                  large={this.props.large}
+                  disabled={this.props.disabled || this.isDisabled(option.value, field.value)}
+                  onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                    const isChecked = event.currentTarget.checked;
+                    const value: any[] = field.value;
+                    if (isChecked) {
+                      value.push(option.value);
+                    } else {
+                      value.splice(value.indexOf(option.value), 1);
+                    }
+                    form.setFieldValue(field.name, value);
+                    form.setFieldTouched(field.name, true, false);
+                  }}
+                />
+              ))
+            }
+          </FormGroup>
         )}
       </Field>
     );
