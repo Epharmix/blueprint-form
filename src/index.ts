@@ -1,4 +1,10 @@
-import { useField, useFormikContext as useFormContext, connect } from 'formik';
+import {
+  useField,
+  useFormikContext as useFormContext,
+  connect,
+  FieldArray,
+  ArrayHelpers
+} from 'formik';
 
 import Form from './form';
 import FormInstance from './instance';
@@ -43,7 +49,9 @@ export type {
   CheckboxProps,
   CheckboxGroupProps,
   RadioGroupProps,
-  SubmitButtonProps
+  SubmitButtonProps,
+  // Export formik types
+  ArrayHelpers
 };
 
 export {
@@ -62,8 +70,9 @@ export {
   CheckboxGroup,
   RadioGroup,
   SubmitButton,
-  // Expose formik hooks
+  // Expose formik components
   useField,
   useFormContext,
-  connect
+  connect,
+  FieldArray
 };
