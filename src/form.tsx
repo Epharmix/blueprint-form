@@ -13,11 +13,19 @@ interface FormProps<Values extends FormikValues> {
   form: FormInstance<Values>,
   validate?: (values: Values) => void | FormErrors | Promise<FormErrors>;
   children?: ((props: FormikProps<Values>) => JSX.Element) | JSX.Element | JSX.Element[],
-  onSubmit: (data: any) => void
+  onSubmit: (data: any) => void,
+  className?: string,
+  style?: React.CSSProperties
 }
 
-const Form = <Values extends FormikValues>({form: instance, validate, children, onSubmit}: FormProps<Values>): JSX.Element => {
-
+const Form = <Values extends FormikValues>({
+  form: instance,
+  validate,
+  children,
+  onSubmit,
+  className,
+  style
+}: FormProps<Values>): JSX.Element => {
   return (
     <Formik
       initialValues={instance.initialData}
@@ -28,6 +36,8 @@ const Form = <Values extends FormikValues>({form: instance, validate, children, 
         instance.setForm(props);
         return (
           <form
+            className={className}
+            style={style}
             onReset={props.handleReset}
             onSubmit={props.handleSubmit}
           >
@@ -43,7 +53,6 @@ const Form = <Values extends FormikValues>({form: instance, validate, children, 
       }}
     </Formik>
   );
-
 };
 
 export default Form;
