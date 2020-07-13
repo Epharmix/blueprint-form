@@ -241,12 +241,20 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     onSubmit(_data);
   };
 
+  // Receive the data on change
+  const onChange = (data: EnrollData) => {
+    const _data = serialize(data);
+    /* eslint-disable-next-line no-console */
+    console.log(_data);
+  };
+
   return (
     <Card>
       <Form
         form={form}
         validate={validate}
         onSubmit={_onSubmit}
+        onChange={onChange}
       >
         {(props) => (
           <React.Fragment>
