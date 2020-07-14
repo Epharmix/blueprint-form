@@ -70,3 +70,78 @@ export default class SelectInput extends Markup<SelectInputProps> {
   }
 
 }
+
+export type SelectBooleanInputProps = Omit<SelectInputProps, 'options'> & {
+  trueLabel?: string,
+  falseLabel?: string
+}
+
+export class SelectBooleanInput extends Markup<SelectBooleanInputProps> {
+
+  public readonly type: MarkupType = MarkupType.Select;
+  private ref: HTMLSelectElement;
+
+  constructor(props: SelectInputProps) {
+    super(props);
+    this.ref = null;
+  }
+
+  public componentDidMount(): void {
+    this.ref.setAttribute('aria-label', this.props.label);
+  }
+
+  private getInput(field, form, meta): JSX.Element {
+    const options = [{
+      label: this.props.trueLabel || 'Yes',
+      value: 'true'
+    }, {
+      label: this.props.falseLabel || 'No',
+      value: 'false'
+    }];
+    return (
+      <HTMLSelect
+        elementRef={(ref) => this.ref = ref}
+        className={this.props.className}
+        style={this.props.style}
+        fill={this.props.fill}
+        large={this.props.large}
+        id={this.id}
+        intent={meta.error && meta.touched ? 'danger' : 'none'}
+        options={options}
+        disabled={this.props.disabled}
+        {...field}
+        value={String(field.value)}
+        onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+          const value = event.currentTarget.value === 'true';
+          form.setFieldTouched(this.props.name, true);
+          form.setFieldValue(field.name, value);
+        }}
+      />
+    );
+  }
+
+  public render(): JSX.Element {
+    return (
+      <Field name={this.props.name}>
+        {({ field, form, meta }) => {
+          const input = this.getInput(field, form, meta);
+          if (this.props.bare) {
+            return input;
+          }
+          return (
+            <FormGroup
+              label={this.props.label}
+              labelFor={this.id}
+              labelInfo={this.props.required ? '(required)' : ''}
+              intent={meta.error && meta.touched ? 'danger' : 'none'}
+              helperText={meta.touched ? meta.error : null}
+            >
+              {input}
+            </FormGroup>
+          );
+        }}
+      </Field>
+    );
+  }
+
+}

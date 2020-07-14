@@ -29,6 +29,7 @@ import {
   CheckboxGroup,
   RadioGroup,
   SelectInput,
+  SelectBooleanInput,
   useField
 } from '../src/index';
 
@@ -138,6 +139,7 @@ export interface EnrollData {
   pin: string,
   hasScale: boolean,
   baselineWeight?: number,
+  isHappy: boolean,
   description: string,
   isLevelA: boolean,
   isLevelB: boolean,
@@ -182,6 +184,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     pin: '123',
     hasScale: true,
     baselineWeight: 123,
+    isHappy: false,
     description: 'Etiam varius neque feugiat elit aliquam venenatis.',
     isLevelA: true,
     isLevelB: false,
@@ -407,6 +410,15 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 label: 'Green',
                 value: 'green'
               }]}
+              fill
+              large={isLarge}
+              disabled={isDisabled}
+            />
+            <SelectBooleanInput
+              label="Are you happy?"
+              name="isHappy"
+              trueLabel="Very Happy"
+              falseLabel="Not Happy"
               fill
               large={isLarge}
               disabled={isDisabled}

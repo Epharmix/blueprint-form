@@ -21,7 +21,11 @@ import TextInput, {
   TextAreaProps
 } from './components/text';
 import NumberInput, { NumberInputProps } from './components/number';
-import SelectInput, { SelectInputProps } from './components/select';
+import SelectInput, {
+  SelectInputProps,
+  SelectBooleanInput,
+  SelectBooleanInputProps
+} from './components/select';
 import Switch, { SwitchInputProps } from './components/switch';
 import Checkbox, {
   CheckboxProps,
@@ -45,6 +49,7 @@ export type {
   TextAreaProps,
   NumberInputProps,
   SelectInputProps,
+  SelectBooleanInputProps,
   SwitchInputProps,
   CheckboxProps,
   CheckboxGroupProps,
@@ -65,6 +70,7 @@ export {
   TextArea,
   NumberInput,
   SelectInput,
+  SelectBooleanInput,
   Switch,
   Checkbox,
   CheckboxGroup,
