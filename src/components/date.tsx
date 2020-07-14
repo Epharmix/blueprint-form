@@ -27,6 +27,7 @@ interface DateInputState {
 class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<FormikValues> }, DateInputState> {
 
   public readonly type: MarkupType = MarkupType.Date;
+  private ref: HTMLInputElement;
   private switchId: string;
 
   constructor(props: DateInputProps) {
@@ -35,11 +36,16 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
     this.parseDate = this.parseDate.bind(this);
     this.validate = this.validate.bind(this);
     this.toggleNoEnd = this.toggleNoEnd.bind(this);
+    this.ref = null;
     this.switchId = uid(16);
     this.state = {
       isNoEnd: false
     };
     return;
+  }
+
+  public componentDidMount(): void {
+    this.ref.setAttribute('aria-label', this.props.label);
   }
 
   public componentDidUpdate(props: DateInputProps & { formik?: FormikContextType<FormikValues> }, state: DateInputState) {
@@ -108,85 +114,98 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
       }
     });
   }
+
+  private getInput(field, form, meta): JSX.Element {
+    return (
+      <_DateInput
+        className={this.props.className}
+        fill={this.props.fill || this.props.isEndDate}
+        formatDate={this.formatDate}
+        parseDate={this.parseDate}
+        placeholder={this.props.format || DEFAULT_FORMAT}
+        showActionsBar
+        canClearSelection={false}
+        minDate={this.props.min}
+        maxDate={this.props.max}
+        initialMonth={this.props.min || new Date()}
+        inputProps={{
+          inputRef: (ref) => this.ref = ref,
+          id: this.id,
+          name: field.name,
+          style: this.props.style,
+          large: this.props.large,
+          intent: meta.error && meta.touched ? 'danger' : 'none'
+        }}
+        value={meta.value}
+        onChange={(value: Date) => {
+          form.setFieldTouched(field.name);
+          form.setFieldValue(field.name, value);
+        }}
+        disabled={this.props.disabled || this.state.isNoEnd}
+      />
+    );
+  }
   
   public render(): JSX.Element {
     return (
       <Field name={this.props.name} validate={this.validate}>
-        {({ field, form, meta }) => (
-          <FormGroup
-            label={this.props.label}
-            labelFor={this.id}
-            labelInfo={this.props.required ? '(required)' : ''}
-            intent={meta.error && meta.touched ? 'danger' : 'none'}
-            helperText={meta.touched ? meta.error : null}
-          >
-            <div style={{
-              position: 'relative',
-              paddingLeft: this.props.isEndDate ? '150px' : 0
-            }}>
-              {
-                this.props.isEndDate && (
-                  <React.Fragment>
-                    <div style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0
-                    }}>
-                      <Switch
-                        id={this.switchId}
-                        labelElement={<label htmlFor={this.switchId}>No End</label>}
-                        large={this.props.large}
-                        checked={this.state.isNoEnd}
-                        disabled={this.props.disabled}
-                        onChange={this.toggleNoEnd}
-                      />
-                    </div>
-                    <div 
-                      className={`bp3-control ${this.props.large ? 'bp3-text-large' : ''}`} 
-                      style={{
+        {({ field, form, meta }) => {
+          const input = this.getInput(field, form, meta);
+          if (this.props.bare) {
+            return input;
+          }
+          return (
+            <FormGroup
+              label={this.props.label}
+              labelFor={this.id}
+              labelInfo={this.props.required ? '(required)' : ''}
+              intent={meta.error && meta.touched ? 'danger' : 'none'}
+              helperText={meta.touched ? meta.error : null}
+            >
+              <div style={{
+                position: 'relative',
+                paddingLeft: this.props.isEndDate ? '150px' : 0
+              }}>
+                {
+                  this.props.isEndDate && (
+                    <React.Fragment>
+                      <div style={{
                         position: 'absolute',
                         top: 0,
-                        left: '110px',
-                        paddingLeft: 0
-                      }}
-                    >
-                      OR
-                    </div>
-                  </React.Fragment>
-                )
-              }
-              <div style={{
-                width: '100%'
-              }}>
-                <_DateInput
-                  className={this.props.className}
-                  fill={this.props.fill || this.props.isEndDate}
-                  formatDate={this.formatDate}
-                  parseDate={this.parseDate}
-                  placeholder={this.props.format || DEFAULT_FORMAT}
-                  showActionsBar
-                  canClearSelection={false}
-                  minDate={this.props.min}
-                  maxDate={this.props.max}
-                  initialMonth={this.props.min || new Date()}
-                  inputProps={{
-                    id: this.id,
-                    name: field.name,
-                    style: this.props.style,
-                    large: this.props.large,
-                    intent: meta.error && meta.touched ? 'danger' : 'none',
-                  }}
-                  value={meta.value}
-                  onChange={(value: Date) => {
-                    form.setFieldTouched(field.name);
-                    form.setFieldValue(field.name, value);
-                  }}
-                  disabled={this.props.disabled || this.state.isNoEnd}
-                />
+                        left: 0
+                      }}>
+                        <Switch
+                          id={this.switchId}
+                          labelElement={<label htmlFor={this.switchId}>No End</label>}
+                          large={this.props.large}
+                          checked={this.state.isNoEnd}
+                          disabled={this.props.disabled}
+                          onChange={this.toggleNoEnd}
+                        />
+                      </div>
+                      <div 
+                        className={`bp3-control ${this.props.large ? 'bp3-text-large' : ''}`} 
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: '110px',
+                          paddingLeft: 0
+                        }}
+                      >
+                        OR
+                      </div>
+                    </React.Fragment>
+                  )
+                }
+                <div style={{
+                  width: '100%'
+                }}>
+                  {input}
+                </div>
               </div>
-            </div>
-          </FormGroup>
-        )}
+            </FormGroup>
+          );
+        }}
       </Field>
     );
   }
@@ -215,7 +234,9 @@ export const StartDateInput = (props: StartDateInputProps): JSX.Element => {
 
 };
 
-export const EndDateInput = (props: DateInputProps): JSX.Element => {
+export type EndDateInputProps = Omit<DateInputProps, 'bare'>;
+
+export const EndDateInput = (props: EndDateInputProps): JSX.Element => {
 
   return (
     <DateInputWrapper

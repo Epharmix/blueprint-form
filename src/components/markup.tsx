@@ -13,6 +13,7 @@ export interface MarkupProps {
   className?: string,
   label?: string,
   name?: string,
+  bare?: boolean,
   fill?: boolean,
   large?: boolean,
   required?: boolean,

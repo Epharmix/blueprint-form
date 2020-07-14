@@ -24,10 +24,16 @@ export interface TextInputProps extends MarkupProps {
 export default class TextInput extends Markup<TextInputProps> {
   
   public readonly type: MarkupType = MarkupType.Text;
+  private ref: HTMLInputElement;
 
   constructor(props: TextInputProps) {
     super(props);
     this.validate = this.validate.bind(this);
+    this.ref = null;
+  }
+
+  public componentDidMount(): void {
+    this.ref.setAttribute('aria-label', this.props.label);
   }
 
   private validate(value: string | null): FormError {
@@ -43,35 +49,48 @@ export default class TextInput extends Markup<TextInputProps> {
     return error;
   }
 
+  private getInput(field, meta): JSX.Element {
+    return (
+      <InputGroup
+        inputRef={(ref) => this.ref = ref}
+        className={this.props.className}
+        style={this.props.style}
+        fill={this.props.fill}
+        large={this.props.large}
+        small={this.props.small}
+        leftIcon={this.props.leftIcon}
+        leftElement={this.props.leftElement}
+        rightElement={this.props.rightElement}
+        placeholder={this.props.placeholder}
+        id={this.id}
+        intent={meta.error && meta.touched ? 'danger' : 'none'}
+        disabled={this.props.disabled}
+        type={this.props.type}
+        {...field} 
+      />
+    );
+  }
+
   public render(): JSX.Element {
     return (
       <Field name={this.props.name} validate={this.validate}>
-        {({ field, meta }) => (
-          <FormGroup
-            label={this.props.label}
-            labelFor={this.id}
-            labelInfo={this.props.required ? '(required)' : ''}
-            intent={meta.error && meta.touched ? 'danger' : 'none'}
-            helperText={meta.touched ? meta.error : null}
-          >
-            <InputGroup 
-              className={this.props.className}
-              style={this.props.style}
-              fill={this.props.fill}
-              large={this.props.large}
-              small={this.props.small}
-              leftIcon={this.props.leftIcon}
-              leftElement={this.props.leftElement}
-              rightElement={this.props.rightElement}
-              placeholder={this.props.placeholder}
-              id={this.id}
+        {({ field, meta }) => {
+          const input = this.getInput(field, meta);
+          if (this.props.bare) {
+            return input;
+          }
+          return (
+            <FormGroup
+              label={this.props.label}
+              labelFor={this.id}
+              labelInfo={this.props.required ? '(required)' : ''}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
-              disabled={this.props.disabled}
-              type={this.props.type}
-              {...field} 
-            />
-          </FormGroup>
-        )}
+              helperText={meta.touched ? meta.error : null}
+            >
+              {this.getInput(field, meta)}
+            </FormGroup>
+          );
+        }}
       </Field>
     );
   }
@@ -79,6 +98,7 @@ export default class TextInput extends Markup<TextInputProps> {
 }
 
 export interface TextAreaProps extends MarkupProps {
+  placeholder?: string,
   pattern?: RegExp,
   patternError?: string
   growVertically?: boolean
@@ -87,10 +107,16 @@ export interface TextAreaProps extends MarkupProps {
 export class TextArea extends Markup<TextAreaProps> {
 
   public readonly type: MarkupType = MarkupType.TextArea;
+  private ref: HTMLTextAreaElement;
 
   constructor(props: TextInputProps) {
     super(props);
     this.validate = this.validate.bind(this);
+    this.ref = null;
+  }
+
+  public componentDidMount(): void {
+    this.ref.setAttribute('aria-label', this.props.label);
   }
 
   private validate(value: string | null): FormError {
@@ -106,32 +132,46 @@ export class TextArea extends Markup<TextAreaProps> {
     return error;
   }
 
+  private getInput(field, meta): JSX.Element {
+    return (
+      <_TextArea
+        inputRef={(ref) => this.ref = ref}
+        className={this.props.className}
+        style={Object.assign({
+          resize: 'none'
+        }, this.props.style)}
+        id={this.id}
+        fill={this.props.fill}
+        large={this.props.large}
+        growVertically={this.props.growVertically}
+        intent={meta.error && meta.touched ? 'danger' : 'none'}
+        placeholder={this.props.placeholder}
+        disabled={this.props.disabled}
+        {...field} 
+      />
+    );
+  }
+
   public render(): JSX.Element {
     return (
       <Field name={this.props.name} validate={this.validate}>
-        {({ field, meta }) => (
-          <FormGroup
-            label={this.props.label}
-            labelFor={this.id}
-            labelInfo={this.props.required ? '(required)' : ''}
-            intent={meta.error && meta.touched ? 'danger' : 'none'}
-            helperText={meta.touched ? meta.error : null}
-          >
-            <_TextArea
-              className={this.props.className}
-              style={Object.assign({
-                resize: 'none'
-              }, this.props.style)}
-              id={this.id}
-              fill={this.props.fill}
-              large={this.props.large}
-              growVertically={this.props.growVertically}
+        {({ field, meta }) => {
+          const input = this.getInput(field, meta);
+          if (this.props.bare) {
+            return input;
+          }
+          return (
+            <FormGroup
+              label={this.props.label}
+              labelFor={this.id}
+              labelInfo={this.props.required ? '(required)' : ''}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
-              disabled={this.props.disabled}
-              {...field} 
-            />
-          </FormGroup>
-        )}
+              helperText={meta.touched ? meta.error : null}
+            >
+              {input}
+            </FormGroup>
+          );
+        }}
       </Field>
     );
   }

@@ -10,6 +10,7 @@ import { MarkupType, FormError } from './types';
 import { MarkupProps, Markup } from './markup';
 
 export interface NumberInputProps extends MarkupProps {
+  placeholder?: string,
   min?: number,
   max?: number
 }
@@ -17,10 +18,12 @@ export interface NumberInputProps extends MarkupProps {
 export default class TextInput extends Markup<NumberInputProps> {
   
   public readonly type: MarkupType = MarkupType.Number;
+  private ref: HTMLInputElement;
 
   constructor(props: NumberInputProps) {
     super(props);
     this.validate = this.validate.bind(this);
+    this.ref = null;
   }
 
   private validate(value: number | null): FormError {
@@ -39,43 +42,61 @@ export default class TextInput extends Markup<NumberInputProps> {
     return error;
   }
 
+  public componentDidMount(): void {
+    this.ref.setAttribute('aria-label', this.props.label);
+  }
+
+  private getInput(field, form, meta): JSX.Element {
+    return (
+      <NumericInput
+        inputRef={(ref) => this.ref = ref}
+        className={this.props.className}
+        style={this.props.style}
+        fill={this.props.fill}
+        large={this.props.large}
+        id={this.id}
+        name={field.name}
+        min={this.props.min}
+        max={this.props.max}
+        intent={meta.error && meta.touched ? 'danger' : 'none'}
+        value={field.value || ''}
+        placeholder={this.props.placeholder}
+        onFocus={() => {
+          form.setFieldTouched(field.name);
+        }}
+        onValueChange={(value, valueAsString) => {
+          let _value: number | null = value;
+          if (valueAsString.trim().length === 0) {
+            _value = null;
+          }
+          form.setFieldTouched(field.name);
+          form.setFieldValue(field.name, _value);
+        }}
+        disabled={this.props.disabled}
+      />
+    );
+  }
+
   public render(): JSX.Element {
     return (
       <Field name={this.props.name} validate={this.validate}>
-        {({ field, form, meta }) => (
-          <FormGroup
-            label={this.props.label}
-            labelFor={this.id}
-            labelInfo={this.props.required ? '(required)' : ''}
-            intent={meta.error && meta.touched ? 'danger' : 'none'}
-            helperText={meta.touched ? meta.error : null}
-          >
-            <NumericInput
-              className={this.props.className}
-              style={this.props.style}
-              fill={this.props.fill}
-              large={this.props.large}
-              id={this.id}
-              name={field.name}
-              min={this.props.min}
-              max={this.props.max}
+        {({ field, form, meta }) => {
+          const input = this.getInput(field, form, meta);
+          if (this.props.bare) {
+            return input;
+          }
+          return (
+            <FormGroup
+              label={this.props.label}
+              labelFor={this.id}
+              labelInfo={this.props.required ? '(required)' : ''}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
-              value={field.value || ''}
-              onFocus={() => {
-                form.setFieldTouched(field.name);
-              }}
-              onValueChange={(value, valueAsString) => {
-                let _value: number | null = value;
-                if (valueAsString.trim().length === 0) {
-                  _value = null;
-                }
-                form.setFieldTouched(field.name);
-                form.setFieldValue(field.name, _value);
-              }}
-              disabled={this.props.disabled}
-            />
-          </FormGroup>
-        )}
+              helperText={meta.touched ? meta.error : null}
+            >
+              {input}
+            </FormGroup>
+          );
+        }}
       </Field>
     );
   }

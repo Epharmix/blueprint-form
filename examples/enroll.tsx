@@ -145,7 +145,10 @@ export interface EnrollData {
   days: number[],
   dmType: string,
   color: string,
-  country: string
+  country: string,
+  height: number,
+  salute: string,
+  holiday: string
 }
 
 export type SerializedEnrolleData = {
@@ -186,7 +189,10 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     days: [1, 5],
     dmType: 'II',
     color: 'green',
-    country: 'Air Nomads'
+    country: 'Air Nomads',
+    height: 180,
+    salute: 'HTTR!',
+    holiday: 'christmas'
   };
   const form = new FormInstance<EnrollData>(initialData);
 
@@ -274,13 +280,6 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               large={isLarge}
               disabled={isDisabled}
             />
-            <DateInput
-              label="Exam Date"
-              name="examAt"
-              fill
-              large={isLarge}
-              disabled={isDisabled}
-            />
             <TextInput
               label="First Name"
               name="firstName"
@@ -293,13 +292,6 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               label="Last Name"
               name="lastName"
               required
-              large={isLarge}
-              disabled={isDisabled}
-            />
-            <TextInput
-              label="PIN"
-              name="pin"
-              type="password"
               large={isLarge}
               disabled={isDisabled}
             />
@@ -425,6 +417,65 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               large={isLarge}
               disabled={isDisabled}
             />
+            <div>
+              <b>Bare Elements</b>
+              <br /><br />
+              <TextInput
+                label="PIN"
+                name="pin"
+                type="password"
+                placeholder="PIN"
+                bare
+                large={isLarge}
+                disabled={isDisabled}
+              />
+              <br />
+              <NumberInput
+                label="Height"
+                name="height"
+                placeholder="Height (cm)"
+                bare
+                fill
+                required
+                large={isLarge}
+                disabled={isDisabled}
+              />
+              <br />
+              <TextArea
+                label="Salute"
+                name="salute"
+                placeholder="Write your own salutation here..."
+                bare
+                fill
+                growVertically
+                disabled={isDisabled}
+              />
+              <br /><br />
+              <SelectInput
+                label="Holiday of Choice"
+                name="holiday"
+                options={[{
+                  label: 'New Years Day',
+                  value: 'nyd'
+                }, {
+                  label: 'Christmas',
+                  value: 'christmas'
+                }]}
+                bare
+                fill
+                large={isLarge}
+                disabled={isDisabled}
+              />
+              <br /><br />
+              <DateInput
+                label="Exam Date"
+                name="examAt"
+                bare
+                fill
+                large={isLarge}
+                disabled={isDisabled}
+              />
+            </div>
             <br />
             <SubmitButton
               large={isLarge}
