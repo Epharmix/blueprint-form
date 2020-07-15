@@ -102,7 +102,7 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
             {
               this.props.options.map((option, i) => (
                 <_Checkbox
-                  className={this.props.className}
+                  className={field.value.includes(option.value) ? 'bp3-checkbox-checked' : null}
                   style={this.props.style}
                   key={i}
                   id={`${this.id}.${i}`}
