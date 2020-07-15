@@ -164,7 +164,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
             >
               <div style={{
                 position: 'relative',
-                paddingLeft: this.props.isEndDate ? '150px' : 0
+                paddingLeft: this.props.isEndDate ? '170px' : 0
               }}>
                 {
                   this.props.isEndDate && (
@@ -175,6 +175,9 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
                         left: 0
                       }}>
                         <Switch
+                          style={{
+                            display: 'inline-block'
+                          }}
                           id={this.switchId}
                           labelElement={<label htmlFor={this.switchId}>No End</label>}
                           large={this.props.large}
@@ -182,17 +185,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
                           disabled={this.props.disabled}
                           onChange={this.toggleNoEnd}
                         />
-                      </div>
-                      <div 
-                        className={`bp3-control ${this.props.large ? 'bp3-text-large' : ''}`} 
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: '110px',
-                          paddingLeft: 0
-                        }}
-                      >
-                        OR
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>OR</b></span>
                       </div>
                     </React.Fragment>
                   )
