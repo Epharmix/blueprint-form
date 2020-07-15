@@ -1,7 +1,7 @@
 {
   "name": "blueprint-form",
   "description": "A form composition layer for BlueprintJS using Formik.",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "author": "Evan Huang <evan.huang@caresignal.health>",
   "license": "MIT",
   "repository": {
