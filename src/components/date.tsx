@@ -185,7 +185,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
                           disabled={this.props.disabled}
                           onChange={this.toggleNoEnd}
                         />
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>OR</b></span>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;<b>OR</b></span>
                       </div>
                     </React.Fragment>
                   )
