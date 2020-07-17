@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { Field } from 'formik';
+import { Field, FormikProps } from 'formik';
 import { FormGroup, Checkbox as _Checkbox } from '@blueprintjs/core';
 
 import { MarkupType, Option, FormError } from './types';
@@ -57,10 +57,21 @@ export interface CheckboxGroupProps extends MarkupProps {
 export class CheckboxGroup extends Markup<CheckboxGroupProps> {
 
   public readonly type: MarkupType = MarkupType.CheckboxGroup;
+  private form: FormikProps<any>;
 
   constructor(props: CheckboxGroupProps) {
     super(props);
     this.validate = this.validate.bind(this);
+  }
+
+  public componentDidUpdate(): void {
+    const limit = this.props.maxItems || this.props.numItems;
+    if (limit > 0 && this.form) {
+      const value: any[] = this.form.values[this.props.name];
+      if (Array.isArray(value) && value.length > limit) {
+        this.form.setFieldValue(this.props.name, value.slice(0, limit));
+      }
+    }
   }
 
   private validate(value: string[] | number[] | null): FormError {
@@ -93,42 +104,45 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
   public render(): JSX.Element {
     return (
       <Field name={this.props.name} validate={this.validate}>
-        {({ field, form, meta }) => (
-          <FormGroup
-            label={this.props.label}
-            intent={meta.error && meta.touched ? 'danger' : 'none'}
-            helperText={meta.touched ? meta.error : null}
-          >
-            {
-              this.props.options.map((option, i) => (
-                <_Checkbox
-                  className={field.value.includes(option.value) ? 'bp3-checkbox-checked' : null}
-                  style={this.props.style}
-                  key={i}
-                  id={`${this.id}.${i}`}
-                  name={this.props.name}
-                  labelElement={<label htmlFor={`${this.id}.${i}`}>{option.label}</label>}
-                  checked={field.value.includes(option.value)}
-                  value={String(option.value)}
-                  inline={this.props.inline}
-                  large={this.props.large}
-                  disabled={this.props.disabled || this.isDisabled(option.value, field.value)}
-                  onChange={(event: React.FormEvent<HTMLInputElement>) => {
-                    const isChecked = event.currentTarget.checked;
-                    const value: any[] = field.value;
-                    if (isChecked) {
-                      value.push(option.value);
-                    } else {
-                      value.splice(value.indexOf(option.value), 1);
-                    }
-                    form.setFieldValue(field.name, value);
-                    form.setFieldTouched(field.name, true, false);
-                  }}
-                />
-              ))
-            }
-          </FormGroup>
-        )}
+        {({ field, form, meta }) => {
+          this.form = form;
+          return (
+            <FormGroup
+              label={this.props.label}
+              intent={meta.error && meta.touched ? 'danger' : 'none'}
+              helperText={meta.touched ? meta.error : null}
+            >
+              {
+                this.props.options.map((option, i) => (
+                  <_Checkbox
+                    className={field.value.includes(option.value) ? 'bp3-checkbox-checked' : null}
+                    style={this.props.style}
+                    key={i}
+                    id={`${this.id}.${i}`}
+                    name={this.props.name}
+                    labelElement={<label htmlFor={`${this.id}.${i}`}>{option.label}</label>}
+                    checked={field.value.includes(option.value)}
+                    value={String(option.value)}
+                    inline={this.props.inline}
+                    large={this.props.large}
+                    disabled={this.props.disabled || this.isDisabled(option.value, field.value)}
+                    onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                      const isChecked = event.currentTarget.checked;
+                      const value: any[] = field.value;
+                      if (isChecked) {
+                        value.push(option.value);
+                      } else {
+                        value.splice(value.indexOf(option.value), 1);
+                      }
+                      form.setFieldValue(field.name, value);
+                      form.setFieldTouched(field.name, true, false);
+                    }}
+                  />
+                ))
+              }
+            </FormGroup>
+          );
+        }}
       </Field>
     );
   }
