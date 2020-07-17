@@ -35,6 +35,10 @@ export default class FormInstance<T extends {[key in keyof T]: FormFieldValue}> 
     this.form = form;
   }
 
+  public getForm(): FormikProps<T> {
+    return this.form;
+  }
+
   public setData(data: T): void {
     this.form?.setValues(data);
   }
