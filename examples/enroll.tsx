@@ -251,10 +251,10 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
   };
 
   // Receive the data on change
-  const onChange = (data: EnrollData) => {
+  const onChange = (data: EnrollData, isValid: boolean) => {
     const _data = serialize(data);
-    /* eslint-disable-next-line no-console */
-    console.log(_data);
+    console.info('On Change:', isValid ? 'Valid' : 'Invalid');
+    console.info(_data);
   };
 
   return (

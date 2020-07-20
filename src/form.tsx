@@ -33,7 +33,7 @@ interface FormProps<Values extends FormikValues> {
   validateOnChange?: boolean;
   children?: ((props: FormikProps<Values>) => JSX.Element) | JSX.Element | JSX.Element[],
   onSubmit?: (data: any) => void,
-  onChange?: (data: any) => void,
+  onChange?: (data: any, isValid: boolean) => void,
   className?: string,
   style?: React.CSSProperties
 }
@@ -49,8 +49,8 @@ const Form = <Values extends FormikValues>({
   style
 }: FormProps<Values>): JSX.Element => {
   const _onChange = ({ values, isValid, dirty }: FormikContextType<Values>) => {
-    if (onChange && isValid && dirty) {
-      onChange(values);
+    if (onChange && dirty) {
+      onChange(values, isValid);
     }
   };
   return (
