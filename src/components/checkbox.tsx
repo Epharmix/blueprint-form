@@ -128,11 +128,12 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
                     disabled={this.props.disabled || this.isDisabled(option.value, field.value)}
                     onChange={(event: React.FormEvent<HTMLInputElement>) => {
                       const isChecked = event.currentTarget.checked;
-                      const value: any[] = field.value;
+                      const fieldValue: any[] = field.value;
+                      let value: any[];
                       if (isChecked) {
-                        value.push(option.value);
+                        value = fieldValue.concat(option.value);
                       } else {
-                        value.splice(value.indexOf(option.value), 1);
+                        value = fieldValue.slice(fieldValue.indexOf(option.value), 1);
                       }
                       form.setFieldValue(field.name, value);
                       form.setFieldTouched(field.name, true, false);
