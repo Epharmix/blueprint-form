@@ -2,7 +2,7 @@
  * Form instance
  */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import {
   Formik,
