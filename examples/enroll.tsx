@@ -153,7 +153,7 @@ export interface EnrollData {
   holiday: string
 }
 
-export type SerializedEnrolleData = {
+export type SerializedEnrollData = {
   [key in keyof EnrollData]: 
     EnrollData[key] extends Date ? string : EnrollData[key]
 }
@@ -172,6 +172,29 @@ export interface EnrollProps {
  * Example form
  */
 const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Element => {
+
+  // Some helper methods that do common serializations (e.g. Date -> string)
+  const serialize = (data: EnrollData): SerializedEnrollData => {
+    const values: FormValues = {};
+    for (const key of Object.keys(data)) {
+      if (data[key] instanceof Date) {
+        values[key] = SerializeDate(data[key], DATE_FORMAT);
+      } else {
+        values[key] = data[key];
+      }
+    }
+    return values as SerializedEnrollData;
+  };
+
+  const deserialize = (values: SerializedEnrollData): EnrollData => {
+    const data: EnrollData = {
+      ...values,
+      start: DeserializeDate(values.start, DATE_FORMAT),
+      end: DeserializeDate(values.end, DATE_FORMAT),
+      examAt: DeserializeDate(values.examAt, DATE_FORMAT)
+    };
+    return data;
+  };
 
   // Set the initial data and create the form instance
   const initialData: EnrollData = {
@@ -197,37 +220,16 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     salute: 'HTTR!',
     holiday: 'christmas'
   };
-  const form = new FormInstance<EnrollData>(initialData);
-
-  // Some helper methods that do common serializations (e.g. Date -> string)
-  const serialize = (data: EnrollData): FormValues => {
-    const values: FormValues = {};
-    for (const key of Object.keys(data)) {
-      if (data[key] instanceof Date) {
-        values[key] = SerializeDate(data[key], DATE_FORMAT);
-      } else {
-        values[key] = data[key];
-      }
-    }
-    return values;
-  };
-
-  const deserialize = (values: SerializedEnrolleData): EnrollData => {
-    const data: EnrollData = {
-      ...values,
-      start: DeserializeDate(values.start, DATE_FORMAT),
-      end: DeserializeDate(values.end, DATE_FORMAT),
-      examAt: DeserializeDate(values.examAt, DATE_FORMAT)
-    };
-    return data;
-  };
+  const form = new FormInstance<EnrollData, SerializedEnrollData>(initialData, {
+    serialize, deserialize
+  });
 
   // Set the passed down data on the form
   useEffect(() => {
     if (!data) {
       return;
     }
-    form.setData(deserialize(data as SerializedEnrolleData));
+    form.setData(deserialize(data as SerializedEnrollData));
   }, [JSON.stringify(data)]);
 
   // Pass up the initial data after mount
@@ -244,17 +246,10 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     return errors;
   };
 
-  // Serialize the data and pass it up
-  const _onSubmit = (data: EnrollData) => {
-    const _data = serialize(data);
-    onSubmit(_data);
-  };
-
   // Receive the data on change
-  const onChange = (data: EnrollData, isValid: boolean) => {
-    const _data = serialize(data);
+  const onChange = (data: SerializedEnrollData, isValid: boolean) => {
     console.info('On Change:', isValid ? 'Valid' : 'Invalid');
-    console.info(_data);
+    console.info(data);
   };
 
   return (
@@ -262,7 +257,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
       <Form
         form={form}
         validate={validate}
-        onSubmit={_onSubmit}
+        onSubmit={onSubmit}
         onChange={onChange}
       >
         {(props) => (

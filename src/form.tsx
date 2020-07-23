@@ -2,7 +2,8 @@
  * Form instance
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 import {
   Formik,
   FormikValues,
@@ -21,14 +22,15 @@ interface FormikOnChangeProps<Values extends FormikValues> {
 
 const FormikOnChange = <Values extends FormikValues>({ onChange }: FormikOnChangeProps<Values>) => {
   const context = useFormikContext<Values>();
-  useEffect(() => {
+  const { values, isValid, dirty } = context;
+  useDeepCompareEffect(() => {
     onChange(context);
-  }, [context, onChange]);
+  }, [values, isValid, dirty]);
   return null;
 };
 
-interface FormProps<Values extends FormikValues> {
-  form: FormInstance<Values>,
+interface FormProps<Values extends FormikValues, S extends any = never> {
+  form: FormInstance<Values, S>,
   validate?: (values: Values) => void | FormErrors | Promise<FormErrors>;
   validateOnChange?: boolean;
   children?: ((props: FormikProps<Values>) => JSX.Element) | JSX.Element | JSX.Element[],
@@ -38,7 +40,7 @@ interface FormProps<Values extends FormikValues> {
   style?: React.CSSProperties
 }
 
-const Form = <Values extends FormikValues>({
+const Form = <Values extends FormikValues, S extends any = never>({
   form: instance,
   validate,
   validateOnChange,
@@ -47,10 +49,10 @@ const Form = <Values extends FormikValues>({
   onChange,
   className,
   style
-}: FormProps<Values>): JSX.Element => {
+}: FormProps<Values, S>): JSX.Element => {
   const _onChange = ({ values, isValid, dirty }: FormikContextType<Values>) => {
-    if (onChange && dirty) {
-      onChange(values, isValid);
+    if (dirty) {
+      instance.onChange(values, isValid, onChange);
     }
   };
   return (
@@ -59,7 +61,7 @@ const Form = <Values extends FormikValues>({
       validate={validate}
       validateOnChange={validateOnChange}
       validateOnMount={true}
-      onSubmit={onSubmit}
+      onSubmit={(data) => instance.onSubmit(data, onSubmit)}
     >
       {(props) => {
         instance.setForm(props);
@@ -72,7 +74,7 @@ const Form = <Values extends FormikValues>({
           >
             {
               children
-                ? isFunction(children)  
+                ? isFunction(children)
                   ? (children as (props: FormikProps<Values>) => JSX.Element)(props)
                   : children
                 : null

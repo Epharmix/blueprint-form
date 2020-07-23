@@ -7,7 +7,7 @@ import {
 } from 'formik';
 
 import Form from './form';
-import FormInstance from './instance';
+import FormInstance, { DateSerialized } from './instance';
 import { Markup, MarkupProps } from './components/markup';
 import DateInput, {
   DateInputProps,
@@ -42,6 +42,7 @@ export type {
   FormValues,
   FormError,
   FormErrors,
+  DateSerialized,
   MarkupProps,
   DateInputProps,
   StartDateInputProps,
