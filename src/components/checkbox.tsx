@@ -133,7 +133,7 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
                       if (isChecked) {
                         value = fieldValue.concat(option.value);
                       } else {
-                        value = fieldValue.slice(fieldValue.indexOf(option.value), 1);
+                        value = fieldValue.filter(val => val !== option.value);
                       }
                       form.setFieldValue(field.name, value);
                       form.setFieldTouched(field.name, true, false);
