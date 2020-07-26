@@ -68,6 +68,14 @@ export default class FormInstance<T extends {[key in keyof T]: FormFieldValue}, 
     }
   }
 
+  public setFieldValue<K extends keyof T & string>(field: K, value: T[K], shouldValidate?: boolean): void {
+    this.form?.setFieldValue(field, value, shouldValidate);
+  }
+
+  public reset(): void {
+    this.form?.resetForm();
+  }
+
   public submit(): Promise<void> {
     return this.form?.submitForm();
   }
