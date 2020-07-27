@@ -1,6 +1,8 @@
 import { FormikErrors, FormikValues } from 'formik';
 
-export type FormFieldValue = undefined | null | string | boolean | number | Date | FormFieldValue[] | FormValues;
+export type FormFieldValue = undefined | null | string | boolean | number | Date | FormFieldValue[] | FormValues | {
+  [field: string]: FormFieldValue;
+};
 export interface FormValues {
   [field: string]: FormFieldValue | FormValues
 }
