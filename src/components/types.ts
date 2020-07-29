@@ -1,10 +1,10 @@
 import { FormikErrors, FormikValues } from 'formik';
 
 export type FormFieldValue = undefined | null | string | boolean | number | Date | FormFieldValue[] | FormValues | {
-  [field: string]: FormFieldValue;
+  [field: string]: FormFieldValue | FormFieldValue[];
 };
 export interface FormValues {
-  [field: string]: FormFieldValue | FormValues
+  [field: string]: FormFieldValue | FormValues | FormFieldValue[] | FormValues[]
 }
 export type FormData = FormikValues;
 export type FormError = string | null;
