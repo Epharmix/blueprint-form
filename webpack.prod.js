@@ -59,12 +59,17 @@ module.exports = merge.smartStrategy({
   module: {
     rules: [{
       test: /\.(ts|tsx)$/,
-      use: [{
-        loader: 'ts-loader',
-        options: {
-          configFile: 'tsconfig.prod.json'
+      use: [
+        {
+          loader: 'babel-loader'
+        },
+        {
+          loader: 'ts-loader',
+          options: {
+            configFile: 'tsconfig.prod.json'
+          }
         }
-      }],
+      ],
       exclude: path.resolve(__dirname, 'node_modules')
     }]
   },
