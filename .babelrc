@@ -6,7 +6,9 @@
   "plugins": [
     "@babel/plugin-syntax-dynamic-import",
     "styled-jsx/babel",
+    "@babel/plugin-proposal-class-properties",
     "@babel/plugin-transform-regenerator",
     "@babel/plugin-transform-runtime"
-  ]
+  ],
+  "sourceType": "unambiguous"
 }

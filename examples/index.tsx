@@ -1,3 +1,4 @@
+import 'core-js';
 import '../src/style.scss';
 
 import ReactDOM from 'react-dom';

@@ -37,7 +37,10 @@ module.exports = {
       },
       {
         test: /\.(ts|tsx)$/,
-        use: 'ts-loader',
+        use: [
+          'babel-loader',
+          'ts-loader',
+        ],
         exclude: path.resolve(__dirname, 'node_modules'),
       },
     ],
@@ -59,6 +62,7 @@ module.exports = {
   devServer: {
     contentBase: path.resolve(__dirname, 'public'),
     liveReload: true,
+    host: '0.0.0.0',
     port: 9000,
     historyApiFallback: true,
     writeToDisk: true,
