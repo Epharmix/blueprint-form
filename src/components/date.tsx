@@ -10,7 +10,7 @@ import { MarkupType, FormError } from './types';
 import { MarkupProps, Markup } from './markup';
 import { Switch } from '@blueprintjs/core';
 
-type DateFormat = 'YYYY-MM-DD' | 'MM/DD/YYYY';
+type DateFormat = 'YYYY-MM-DD' | 'MM/DD/YYYY' | 'MM/DD';
 const DEFAULT_FORMAT = 'MM/DD/YYYY';
 
 export interface DateInputProps extends MarkupProps {

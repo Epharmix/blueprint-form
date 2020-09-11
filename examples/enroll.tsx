@@ -133,6 +133,7 @@ export interface EnrollData {
   start: Date,
   end?: Date,
   examAt?: Date,
+  annualAt?: Date,
   tz: string,
   firstName: string,
   lastName: string,
@@ -177,7 +178,9 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
   const serialize = (data: EnrollData): SerializedEnrollData => {
     const values: FormValues = {};
     for (const key of Object.keys(data)) {
-      if (data[key] instanceof Date) {
+      if (key === 'annualAt') {
+        values[key] = SerializeDate(data[key], 'MM/DD');
+      } else if (data[key] instanceof Date) {
         values[key] = SerializeDate(data[key], DATE_FORMAT);
       } else {
         values[key] = data[key];
@@ -191,7 +194,8 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
       ...values,
       start: DeserializeDate(values.start, DATE_FORMAT),
       end: DeserializeDate(values.end, DATE_FORMAT),
-      examAt: DeserializeDate(values.examAt, DATE_FORMAT)
+      examAt: DeserializeDate(values.examAt, DATE_FORMAT),
+      annualAt: DeserializeDate(values.annualAt, 'MM/DD')
     };
     return data;
   };
@@ -200,6 +204,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
   const initialData: EnrollData = {
     start: moment().add(1, 'day').toDate(),
     end: null,
+    annualAt: moment().add(5, 'days').toDate(),
     examAt: null,
     tz: 'US/Mountain',
     firstName: 'John',
@@ -275,6 +280,14 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               name="end"
               fill
               min={props.values.start}
+              large={isLarge}
+              disabled={isDisabled}
+            />
+            <DateInput
+              label="Anniversary Date"
+              name="annualAt"
+              format="MM/DD"
+              fill
               large={isLarge}
               disabled={isDisabled}
             />
