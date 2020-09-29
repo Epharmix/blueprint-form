@@ -18,6 +18,7 @@ export interface MarkupProps {
   large?: boolean,
   required?: boolean,
   disabled?: boolean,
+  autoComplete?: string,
   validate?: (value: any) => FormError
 }
 

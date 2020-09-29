@@ -428,10 +428,32 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               <b>Bare Elements</b>
               <br /><br />
               <TextInput
+                label="Email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="address@domain.com"
+                bare
+                large={isLarge}
+                disabled={isDisabled}
+              />
+              <br />
+              <TextInput
                 label="PIN"
                 name="pin"
                 type="password"
+                autoComplete="password"
                 placeholder="PIN"
+                bare
+                large={isLarge}
+                disabled={isDisabled}
+              />
+              <br />
+              <TextInput
+                label="Phone Number"
+                name="phone"
+                type="tel"
+                placeholder="555-555-5555"
                 bare
                 large={isLarge}
                 disabled={isDisabled}
