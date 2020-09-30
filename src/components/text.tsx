@@ -67,6 +67,7 @@ export default class TextInput extends Markup<TextInputProps> {
         intent={meta.error && meta.touched ? 'danger' : 'none'}
         disabled={this.props.disabled}
         type={this.props.type}
+        autoComplete={this.props.autoComplete}
         {...field} 
       />
     );
@@ -149,6 +150,7 @@ export class TextArea extends Markup<TextAreaProps> {
         intent={meta.error && meta.touched ? 'danger' : 'none'}
         placeholder={this.props.placeholder}
         disabled={this.props.disabled}
+        autoComplete={this.props.autoComplete}
         {...field} 
       />
     );
