@@ -26,6 +26,7 @@ export default class SelectInput extends Markup<SelectInputProps> {
 
   public componentDidMount(): void {
     this.ref.setAttribute('aria-label', this.props.label);
+    this.ref.setAttribute('aria-describedby', this.errorId);
   }
 
   private getInput(field, meta): JSX.Element {
@@ -59,7 +60,7 @@ export default class SelectInput extends Markup<SelectInputProps> {
               labelFor={this.id}
               labelInfo={this.props.required ? '(required)' : ''}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
-              helperText={meta.touched ? meta.error : null}
+              helperText={meta.touched ? this.getErrorNode(meta.error) : null}
             >
               {input}
             </FormGroup>
@@ -88,6 +89,7 @@ export class SelectBooleanInput extends Markup<SelectBooleanInputProps> {
 
   public componentDidMount(): void {
     this.ref.setAttribute('aria-label', this.props.label);
+    this.ref.setAttribute('aria-describedby', this.errorId);
   }
 
   private getInput(field, form, meta): JSX.Element {
@@ -134,7 +136,7 @@ export class SelectBooleanInput extends Markup<SelectBooleanInputProps> {
               labelFor={this.id}
               labelInfo={this.props.required ? '(required)' : ''}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
-              helperText={meta.touched ? meta.error : null}
+              helperText={meta.touched ? this.getErrorNode(meta.error) : null}
             >
               {input}
             </FormGroup>

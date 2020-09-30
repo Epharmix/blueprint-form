@@ -27,10 +27,12 @@ export abstract class Markup<P extends MarkupProps, S = unknown> extends Compone
 
   public readonly abstract type: MarkupType;
   protected readonly id: string;
+  protected readonly errorId: string;
 
   constructor(props: P) {
     super(props);
     this.id = Markup.getID();
+    this.errorId = Markup.getID();
   }
 
   protected _validate(value: FormFieldValue): FormError {
@@ -41,6 +43,10 @@ export abstract class Markup<P extends MarkupProps, S = unknown> extends Compone
       }
     }
     return error;
+  }
+
+  protected getErrorNode(error: string, id?: string): JSX.Element {
+    return <span id={id || this.errorId} aria-live="polite">{error}</span>;
   }
 
   public abstract render(): JSX.Element;

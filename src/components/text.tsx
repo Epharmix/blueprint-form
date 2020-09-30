@@ -34,6 +34,7 @@ export default class TextInput extends Markup<TextInputProps> {
 
   public componentDidMount(): void {
     this.ref.setAttribute('aria-label', this.props.label);
+    this.ref.setAttribute('aria-describedby', this.errorId);
   }
 
   private validate(value: string | null): FormError {
@@ -85,7 +86,7 @@ export default class TextInput extends Markup<TextInputProps> {
               labelFor={this.id}
               labelInfo={this.props.required ? '(required)' : ''}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
-              helperText={meta.touched ? meta.error : null}
+              helperText={meta.touched ? this.getErrorNode(meta.error) : null}
             >
               {this.getInput(field, meta)}
             </FormGroup>
@@ -117,6 +118,7 @@ export class TextArea extends Markup<TextAreaProps> {
 
   public componentDidMount(): void {
     this.ref.setAttribute('aria-label', this.props.label);
+    this.ref.setAttribute('aria-describedby', this.errorId);
   }
 
   private validate(value: string | null): FormError {
@@ -166,7 +168,7 @@ export class TextArea extends Markup<TextAreaProps> {
               labelFor={this.id}
               labelInfo={this.props.required ? '(required)' : ''}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
-              helperText={meta.touched ? meta.error : null}
+              helperText={meta.touched ? this.getErrorNode(meta.error) : null}
             >
               {input}
             </FormGroup>

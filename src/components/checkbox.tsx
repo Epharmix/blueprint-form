@@ -28,6 +28,7 @@ export default class Checkbox extends Markup<CheckboxProps> {
       <Field name={this.props.name} type="checkbox">
         {({ field }) => (
           <_Checkbox
+            aria-describedby={this.errorId}
             id={this.id}
             labelElement={<label htmlFor={this.id}>{this.props.label}</label>}
             inline={this.props.inline}
@@ -110,11 +111,12 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
             <FormGroup
               label={this.props.label}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
-              helperText={meta.touched ? meta.error : null}
+              helperText={meta.touched ? this.getErrorNode(meta.error) : null}
             >
               {
                 this.props.options.map((option, i) => (
                   <_Checkbox
+                    aria-describedby={this.errorId}
                     className={field.value.includes(option.value) ? 'bp3-checkbox-checked' : null}
                     style={this.props.style}
                     key={i}

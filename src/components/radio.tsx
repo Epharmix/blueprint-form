@@ -28,6 +28,7 @@ export default class RadioGroup extends Markup<RadioGroupProps> {
       <Field name={this.props.name} type="checkbox">
         {({ field }) => (
           <_RadioGroup
+
             className={this.props.className}
             label={this.props.label}
             name={this.props.name}
@@ -39,6 +40,7 @@ export default class RadioGroup extends Markup<RadioGroupProps> {
             {
               this.props.options.map((option, i) => (
                 <Radio
+                  aria-describedby={this.errorId}
                   style={this.props.style}
                   large={this.props.large}
                   key={i}

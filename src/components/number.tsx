@@ -44,6 +44,7 @@ export default class TextInput extends Markup<NumberInputProps> {
 
   public componentDidMount(): void {
     this.ref.setAttribute('aria-label', this.props.label);
+    this.ref.setAttribute('aria-describedby', this.errorId);
   }
 
   private getInput(field, form, meta): JSX.Element {
@@ -91,7 +92,7 @@ export default class TextInput extends Markup<NumberInputProps> {
               labelFor={this.id}
               labelInfo={this.props.required ? '(required)' : ''}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
-              helperText={meta.touched ? meta.error : null}
+              helperText={meta.touched ? this.getErrorNode(meta.error) : null}
             >
               {input}
             </FormGroup>

@@ -46,6 +46,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
 
   public componentDidMount(): void {
     this.ref.setAttribute('aria-label', this.props.label);
+    this.ref.setAttribute('aria-describedby', this.errorId);
   }
 
   public componentDidUpdate(props: DateInputProps & { formik?: FormikContextType<FormikValues> }, state: DateInputState) {
@@ -160,7 +161,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
               labelFor={this.id}
               labelInfo={this.props.required ? '(required)' : ''}
               intent={meta.error && meta.touched ? 'danger' : 'none'}
-              helperText={meta.touched ? meta.error : null}
+              helperText={meta.touched ? this.getErrorNode(meta.error) : null}
             >
               <div style={{
                 position: 'relative',
