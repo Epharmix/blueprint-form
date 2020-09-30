@@ -47,6 +47,9 @@ export abstract class Markup<P extends MarkupProps, S = unknown> extends Compone
   }
 
   protected getErrorNode(error: string, id?: string): JSX.Element {
+    if (!error) {
+      return null;
+    }
     return <span id={id || this.errorId} aria-live="polite">{error}</span>;
   }
 
