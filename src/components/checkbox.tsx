@@ -117,13 +117,13 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
                 this.props.options.map((option, i) => (
                   <_Checkbox
                     aria-describedby={this.errorId}
-                    className={field.value.includes(option.value) ? 'bp3-checkbox-checked' : null}
+                    className={field.value && field.value.includes(option.value) ? 'bp3-checkbox-checked' : null}
                     style={this.props.style}
                     key={i}
                     id={`${this.id}.${i}`}
                     name={this.props.name}
                     labelElement={<label htmlFor={`${this.id}.${i}`}>{option.label}</label>}
-                    checked={field.value.includes(option.value)}
+                    checked={field.value && field.value.includes(option.value)}
                     value={String(option.value)}
                     inline={this.props.inline}
                     large={this.props.large}
