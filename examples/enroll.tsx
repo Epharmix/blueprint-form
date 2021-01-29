@@ -327,8 +327,14 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               name="description"
               fill
               growVertically
+              spellcheck
               disabled={isDisabled}
             />
+            <TextInput
+              label="Short Description"
+              name="shortDescription"
+              fill
+              spellcheck />
             <Checkbox
               label="Level A"
               name="isLevelA"
@@ -490,6 +496,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 bare
                 fill
                 growVertically
+                spellcheck
                 disabled={isDisabled}
               />
               <br /><br />
