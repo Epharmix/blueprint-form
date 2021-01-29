@@ -18,7 +18,8 @@ export interface TextInputProps extends MarkupProps {
   rightElement?: JSX.Element,
   placeholder?: string,
   pattern?: RegExp,
-  patternError?: string
+  patternError?: string,
+  spellCheck?: boolean,
 }
 
 export default class TextInput extends Markup<TextInputProps> {
@@ -68,6 +69,7 @@ export default class TextInput extends Markup<TextInputProps> {
         disabled={this.props.disabled}
         type={this.props.type}
         autoComplete={this.props.autoComplete}
+        spellCheck={this.props.spellCheck}
         {...field} 
       />
     );
@@ -102,8 +104,9 @@ export default class TextInput extends Markup<TextInputProps> {
 export interface TextAreaProps extends MarkupProps {
   placeholder?: string,
   pattern?: RegExp,
-  patternError?: string
-  growVertically?: boolean
+  patternError?: string,
+  growVertically?: boolean,
+  spellCheck?: boolean,
 }
 
 export class TextArea extends Markup<TextAreaProps> {
@@ -151,6 +154,7 @@ export class TextArea extends Markup<TextAreaProps> {
         placeholder={this.props.placeholder}
         disabled={this.props.disabled}
         autoComplete={this.props.autoComplete}
+        spellCheck={this.props.spellCheck}
         {...field} 
       />
     );

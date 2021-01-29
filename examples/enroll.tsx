@@ -134,6 +134,7 @@ export interface EnrollData {
   end?: Date,
   examAt?: Date,
   annualAt?: Date,
+  dateAt?: Date,
   tz: string,
   firstName: string,
   lastName: string,
@@ -195,7 +196,8 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
       start: DeserializeDate(values.start, DATE_FORMAT),
       end: DeserializeDate(values.end, DATE_FORMAT),
       examAt: DeserializeDate(values.examAt, DATE_FORMAT),
-      annualAt: DeserializeDate(values.annualAt, 'MM/DD')
+      annualAt: DeserializeDate(values.annualAt, 'MM/DD'),
+      dateAt: DeserializeDate(values.annualAt, DATE_FORMAT)
     };
     return data;
   };
@@ -205,6 +207,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     start: moment().add(1, 'day').toDate(),
     end: null,
     annualAt: moment().add(5, 'days').toDate(),
+    dateAt: null,
     examAt: null,
     tz: 'US/Mountain',
     firstName: 'John',
@@ -291,6 +294,14 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               large={isLarge}
               disabled={isDisabled}
             />
+            <DateInput
+              label="Blank Date"
+              name="dateAt"
+              format="MM/DD"
+              fill
+              large={isLarge}
+              disabled={isDisabled}
+            />
             <TextInput
               label="First Name"
               name="firstName"
@@ -327,7 +338,14 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               name="description"
               fill
               growVertically
+              spellCheck
               disabled={isDisabled}
+            />
+            <TextInput
+              label="Short Description"
+              name="shortDescription"
+              fill
+              spellCheck
             />
             <Checkbox
               label="Level A"
@@ -490,6 +508,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 bare
                 fill
                 growVertically
+                spellCheck
                 disabled={isDisabled}
               />
               <br /><br />
