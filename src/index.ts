@@ -18,7 +18,8 @@ import DateInput, {
 import TextInput, {
   TextInputProps,
   TextArea,
-  TextAreaProps
+  TextAreaProps,
+  TextInputModes
 } from './components/text';
 import NumberInput, { NumberInputProps } from './components/number';
 import SelectInput, {
@@ -68,6 +69,7 @@ export {
   StartDateInput,
   EndDateInput,
   TextInput,
+  TextInputModes,
   TextArea,
   NumberInput,
   SelectInput,

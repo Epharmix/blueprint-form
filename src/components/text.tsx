@@ -9,6 +9,11 @@ import { FormGroup, InputGroup, TextArea as _TextArea } from '@blueprintjs/core'
 import { MarkupType, FormError } from './types';
 import { MarkupProps, Markup } from './markup';
 
+export enum TextInputModes {
+  Phone = 'phone',
+  PhoneStrict = 'phone_strict'
+}
+
 export interface TextInputProps extends MarkupProps {
   type?: string,
   round?: boolean,
@@ -19,8 +24,11 @@ export interface TextInputProps extends MarkupProps {
   placeholder?: string,
   pattern?: RegExp,
   patternError?: string,
+  mode?: TextInputModes,
   spellCheck?: boolean,
 }
+
+const REGEX_PHONE = /^\d{10}$/;
 
 export default class TextInput extends Markup<TextInputProps> {
   
@@ -41,8 +49,25 @@ export default class TextInput extends Markup<TextInputProps> {
   private validate(value: string | null): FormError {
     let error = this._validate(value);
     if (!error && value != null) {
-      if (this.props.pattern && !this.props.pattern.test(value)) {
-        error = this.props.patternError || 'This is not in valid format!';
+      let pattern = this.props.pattern;
+      let patternError = this.props.patternError;
+      const mode = this.props.mode;
+      if (!pattern && mode) {
+        if (mode === TextInputModes.Phone) {
+          pattern = REGEX_PHONE;
+          value = value.replace(/\D+/gi, '');
+          if (!patternError) {
+            patternError = 'This does not contain a valid 10-digit phone number!';
+          }
+        } else if (mode === TextInputModes.PhoneStrict) {
+          pattern = REGEX_PHONE;
+          if (!patternError) {
+            patternError = 'This must be a numbers-only, 10-digit phone number!';
+          }
+        }
+      }
+      if (pattern && !pattern.test(value)) {
+        error = patternError || 'This is not in valid format!';
       }
     }
     if (!error && this.props.validate) {

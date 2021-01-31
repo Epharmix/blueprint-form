@@ -21,6 +21,7 @@ import {
   StartDateInput,
   EndDateInput,
   TextInput,
+  TextInputModes,
   TextArea,
   NumberInput,
   SubmitButton,
@@ -139,6 +140,7 @@ export interface EnrollData {
   firstName: string,
   lastName: string,
   pin: string,
+  phone: string,
   hasScale: boolean,
   baselineWeight?: number,
   isHappy: boolean,
@@ -213,6 +215,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     firstName: 'John',
     lastName: 'Doe',
     pin: '123',
+    phone: '',
     hasScale: true,
     baselineWeight: 123,
     isHappy: false,
@@ -484,6 +487,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 label="Phone Number"
                 name="phone"
                 type="tel"
+                mode={TextInputModes.Phone}
                 placeholder="555-555-5555"
                 bare
                 large={isLarge}
