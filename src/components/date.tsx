@@ -58,7 +58,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
           this.setState({
             isNoEnd: false
           });
-        } else if (values[name] == null && !this.state.isNoEnd) {
+        } else if (values[name] === null && !this.state.isNoEnd) {
           this.setState({
             isNoEnd: true
           });

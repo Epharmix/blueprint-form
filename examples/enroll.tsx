@@ -133,6 +133,7 @@ const {
 export interface EnrollData {
   start: Date,
   end?: Date,
+  endAlt?: Date,
   examAt?: Date,
   annualAt?: Date,
   dateAt?: Date,
@@ -197,9 +198,10 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
       ...values,
       start: DeserializeDate(values.start, DATE_FORMAT),
       end: DeserializeDate(values.end, DATE_FORMAT),
+      endAlt: DeserializeDate(values.endAlt, DATE_FORMAT),
       examAt: DeserializeDate(values.examAt, DATE_FORMAT),
       annualAt: DeserializeDate(values.annualAt, 'MM/DD'),
-      dateAt: DeserializeDate(values.annualAt, DATE_FORMAT)
+      dateAt: DeserializeDate(values.dateAt, DATE_FORMAT)
     };
     return data;
   };
@@ -208,6 +210,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
   const initialData: EnrollData = {
     start: moment().add(1, 'day').toDate(),
     end: null,
+    endAlt: moment().add(90, 'days').toDate(),
     annualAt: moment().add(5, 'days').toDate(),
     dateAt: null,
     examAt: null,
@@ -284,6 +287,14 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
             <EndDateInput
               label="End Date"
               name="end"
+              fill
+              min={props.values.start}
+              large={isLarge}
+              disabled={isDisabled}
+            />
+            <EndDateInput
+              label="End Date (With Value)"
+              name="endAlt"
               fill
               min={props.values.start}
               large={isLarge}
