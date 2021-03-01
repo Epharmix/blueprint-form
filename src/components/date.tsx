@@ -218,11 +218,13 @@ export interface StartDateInputProps extends MarkupProps {
 export const StartDateInput = (props: StartDateInputProps): JSX.Element => {
 
   const start = moment().startOf('day').toDate();
+  const end = props.max ? new Date(props.max) : undefined;
 
   return (
     <DateInputWrapper
       {...props}
       min={start}
+      max={end}
     />
   );
 
@@ -232,9 +234,14 @@ export type EndDateInputProps = Omit<DateInputProps, 'bare'>;
 
 export const EndDateInput = (props: EndDateInputProps): JSX.Element => {
 
+  const start = props.min ? new Date(props.min) : undefined;
+  const end = props.max ? new Date(props.max) : undefined;
+
   return (
     <DateInputWrapper
       {...props}
+      min={start}
+      max={end}
       isEndDate
     />
   );

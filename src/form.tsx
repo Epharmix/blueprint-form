@@ -2,7 +2,7 @@
  * Form instance
  */
 
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import {
   Formik,
@@ -29,6 +29,40 @@ const FormikOnChange = <Values extends FormikValues>({ onChange }: FormikOnChang
   return null;
 };
 
+interface FormikOnErrorProps {
+  form: HTMLFormElement;
+}
+
+const isObject = (object: any): boolean => {
+  return typeof object === 'object' && object !== null;
+};
+
+const getFirstErrorKey = (object: any, keys: string[] = []): string => {
+  const firstErrorKey = Object.keys(object)[0];
+  if (isObject(object[firstErrorKey])) {
+    return getFirstErrorKey(object[firstErrorKey], [...keys, firstErrorKey]);
+  }
+  return [...keys, firstErrorKey].join('.');
+};
+
+const FormikOnError = <Values extends FormikValues>({ form }: FormikOnErrorProps) => {
+  const { errors, isValid, submitCount: _submitCount } = useFormikContext<Values>();
+  const [submitCount, setSubmitCount] = useState(_submitCount);
+  useEffect(() => {
+    if (!isValid && form && _submitCount > submitCount) {
+      const key = getFirstErrorKey(errors);
+      const inputs = form.querySelectorAll<HTMLInputElement>(`[name="${key}"]`);
+      if (inputs && inputs.length > 0) {
+        const input = inputs[0];
+        input.focus();
+        input.scrollIntoView({ behavior: 'smooth' });
+      }
+      setSubmitCount(_submitCount);
+    }
+  }, [errors, isValid, _submitCount]);
+  return null;
+};
+
 interface FormProps<Values extends FormikValues, S extends any = never> {
   form: FormInstance<Values, S>,
   validate?: (values: Values) => void | FormErrors | Promise<FormErrors>;
@@ -50,6 +84,7 @@ const Form = <Values extends FormikValues, S extends any = never>({
   className,
   style
 }: FormProps<Values, S>): JSX.Element => {
+  const formRef = useRef<HTMLFormElement>(null);
   const _onChange = ({ values, isValid, dirty }: FormikContextType<Values>) => {
     if (dirty) {
       instance.onChange(values, isValid, onChange);
@@ -67,6 +102,7 @@ const Form = <Values extends FormikValues, S extends any = never>({
         instance.setForm(props);
         return (
           <form
+            ref={formRef}
             className={className}
             style={style}
             onReset={props.handleReset}
@@ -79,9 +115,8 @@ const Form = <Values extends FormikValues, S extends any = never>({
                   : children
                 : null
             }
-            <FormikOnChange<Values>
-              onChange={_onChange}
-            />
+            <FormikOnChange<Values> onChange={_onChange} />
+            <FormikOnError<Values> form={formRef.current} />
           </form>
         );
       }}

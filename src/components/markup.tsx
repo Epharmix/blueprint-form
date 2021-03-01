@@ -17,6 +17,7 @@ export interface MarkupProps {
   fill?: boolean,
   large?: boolean,
   required?: boolean,
+  requiredErrorMessage?: string;
   disabled?: boolean,
   autoComplete?: string,
   validate?: (value: any) => FormError
@@ -40,7 +41,12 @@ export abstract class Markup<P extends MarkupProps, S = unknown> extends Compone
     let error: FormError = null;
     if (this.props.required) {
       if (value == null || value === '') {
-        error = 'This field is required!';
+        if (this.props.requiredErrorMessage != null) {
+          error = this.props.requiredErrorMessage;
+        } else {
+          const name = this.props.label.toLowerCase();
+          error = `The ${name} is required!`;
+        }
       }
     }
     return error;
@@ -50,7 +56,7 @@ export abstract class Markup<P extends MarkupProps, S = unknown> extends Compone
     if (!error) {
       return null;
     }
-    return <span id={id || this.errorId} aria-live="polite">{error}</span>;
+    return <span className="bpf-error-message" id={id || this.errorId} aria-live="polite">{error}</span>;
   }
 
   public abstract render(): JSX.Element;
