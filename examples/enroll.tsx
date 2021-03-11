@@ -1,7 +1,7 @@
 
 import moment from 'moment-timezone';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, FormEvent } from 'react';
 import {
   Card,
   FormGroup,
@@ -266,6 +266,12 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     console.info(data);
   };
 
+  // Ensure the per field on change is working properly
+  const onFieldChange = (field: string, event: FormEvent) => {
+    console.info('Field Change:', field);
+    console.info(event);
+  };
+
   return (
     <Card>
       <Form
@@ -283,6 +289,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               required
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'start')}
             />
             <EndDateInput
               label="End Date"
@@ -291,6 +298,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               min={props.values.start}
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'end')}
             />
             <EndDateInput
               label="End Date (With Value)"
@@ -299,6 +307,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               min={props.values.start}
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'endAlt')}
             />
             <DateInput
               label="Anniversary Date"
@@ -307,6 +316,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               fill
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'annualAt')}
             />
             <DateInput
               label="Blank Date"
@@ -315,6 +325,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               fill
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'dateAt')}
             />
             <TextInput
               label="First Name"
@@ -323,6 +334,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               required
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'firstName')}
             />
             <TextInput
               label="Last Name"
@@ -330,12 +342,14 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               required
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'lastName')}
             />
             <Switch
               label="Has Scale"
               name="hasScale"
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'hasScale')}
             />
             {props.values.hasScale && (
               <NumberInput
@@ -345,6 +359,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 required
                 large={isLarge}
                 disabled={isDisabled}
+                onChange={onFieldChange.bind(this, 'baselineWeight')}
               />
             )}
             <TextArea
@@ -354,18 +369,21 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               growVertically
               spellCheck
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'description')}
             />
             <TextInput
               label="Short Description"
               name="shortDescription"
               fill
               spellCheck
+              onChange={onFieldChange.bind(this, 'shortDescription')}
             />
             <Checkbox
               label="Level A"
               name="isLevelA"
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'isLevelA')}
             />
             {props.values.isLevelA && (
               <Checkbox
@@ -373,6 +391,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 name="isLevelB"
                 large={isLarge}
                 disabled={isDisabled}
+                onChange={onFieldChange.bind(this, 'isLevelB')}
               />
             )}
             <CheckboxGroup
@@ -392,6 +411,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               inline
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'modules')}
             />
             <CheckboxGroup
               label="Pick 2-3 Days of Week"
@@ -423,6 +443,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               maxItems={3}
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'days')}
             />
             <RadioGroup
               label="Diabetes Type"
@@ -436,6 +457,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               }]}
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'dmType')}
             />
             <SelectInput
               label="Favorite Color"
@@ -453,6 +475,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               fill
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'color')}
             />
             <SelectBooleanInput
               label="Are you happy?"
@@ -462,6 +485,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               fill
               large={isLarge}
               disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'isHappy')}
             />
             <CountryInput
               label="Country"
@@ -481,6 +505,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 bare
                 large={isLarge}
                 disabled={isDisabled}
+                onChange={onFieldChange.bind(this, 'email')}
               />
               <br />
               <TextInput
@@ -492,6 +517,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 bare
                 large={isLarge}
                 disabled={isDisabled}
+                onChange={onFieldChange.bind(this, 'pin')}
               />
               <br />
               <TextInput
@@ -503,6 +529,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 bare
                 large={isLarge}
                 disabled={isDisabled}
+                onChange={onFieldChange.bind(this, 'phone')}
               />
               <br />
               <NumberInput
@@ -514,6 +541,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 required
                 large={isLarge}
                 disabled={isDisabled}
+                onChange={onFieldChange.bind(this, 'height')}
               />
               <br />
               <TextArea
@@ -525,6 +553,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 growVertically
                 spellCheck
                 disabled={isDisabled}
+                onChange={onFieldChange.bind(this, 'salute')}
               />
               <br /><br />
               <SelectInput
@@ -541,6 +570,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 fill
                 large={isLarge}
                 disabled={isDisabled}
+                onChange={onFieldChange.bind(this, 'holiday')}
               />
               <br /><br />
               <DateInput
@@ -550,6 +580,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 fill
                 large={isLarge}
                 disabled={isDisabled}
+                onChange={onFieldChange.bind(this, 'examAt')}
               />
             </div>
             <br />

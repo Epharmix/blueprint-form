@@ -114,6 +114,9 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
         setFieldValue(this.props.name as string, null);
       }
     });
+    if (this.props.onChange) {
+      this.props.onChange(event);
+    }
   }
 
   private getInput(field, form, meta): JSX.Element {
@@ -135,12 +138,15 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
           name: field.name,
           style: this.props.style,
           large: this.props.large,
-          intent: meta.error && meta.touched ? 'danger' : 'none'
+          intent: meta.error && meta.touched ? 'danger' : 'none',
         }}
         value={meta.value}
         onChange={(value: Date) => {
           form.setFieldTouched(field.name);
           form.setFieldValue(field.name, value);
+          if (this.props.onChange) {
+            this.props.onChange();
+          }
         }}
         disabled={this.props.disabled || this.state.isNoEnd}
       />

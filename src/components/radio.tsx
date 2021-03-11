@@ -28,12 +28,16 @@ export default class RadioGroup extends Markup<RadioGroupProps> {
       <Field name={this.props.name} type="checkbox">
         {({ field }) => (
           <_RadioGroup
-
             className={this.props.className}
             label={this.props.label}
             name={this.props.name}
             inline={this.props.inline}
-            onChange={field.onChange}
+            onChange={(event) => {
+              field.onChange(event);
+              if (this.props.onChange) {
+                this.props.onChange(event);
+              }
+            }}
             selectedValue={field.value}
             disabled={this.props.disabled}
           >

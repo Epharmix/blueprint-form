@@ -35,7 +35,12 @@ export default class SwitchInput extends Markup<SwitchInputProps> {
             labelElement={<label htmlFor={this.id}>{this.props.label}</label>}
             checked={field.checked}
             name={field.name}
-            onChange={field.onChange}
+            onChange={(event) => {
+              field.onChange(event);
+              if (this.props.onChange) {
+                this.props.onChange(event);
+              }
+            }}
             onBlur={field.onBlur}
             innerLabel={this.props.innerLabel}
             innerLabelChecked={this.props.innerLabelChecked}

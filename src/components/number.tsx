@@ -72,6 +72,9 @@ export default class TextInput extends Markup<NumberInputProps> {
           }
           form.setFieldTouched(field.name);
           form.setFieldValue(field.name, _value);
+          if (this.props.onChange) {
+            this.props.onChange();
+          }
         }}
         disabled={this.props.disabled}
       />

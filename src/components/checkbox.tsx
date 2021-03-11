@@ -36,7 +36,12 @@ export default class Checkbox extends Markup<CheckboxProps> {
             value={this.props.value}
             checked={field.checked}
             name={field.name}
-            onChange={field.onChange}
+            onChange={(event) => {
+              field.onChange(event);
+              if (this.props.onChange) {
+                this.props.onChange(event);
+              }
+            }}
             onBlur={field.onBlur}
             disabled={this.props.disabled}
           />
@@ -128,7 +133,7 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
                     inline={this.props.inline}
                     large={this.props.large}
                     disabled={this.props.disabled || this.isDisabled(option.value, field.value)}
-                    onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                    onChange={(event) => {
                       const isChecked = event.currentTarget.checked;
                       const _value: any[] = field.value;
                       let value: any[];
@@ -139,6 +144,9 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
                       }
                       form.setFieldValue(field.name, value);
                       form.setFieldTouched(field.name, true, false);
+                      if (this.props.onChange) {
+                        this.props.onChange(event);
+                      }
                     }}
                   />
                 ))

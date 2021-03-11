@@ -4,7 +4,7 @@
 
 import uid from 'uid';
 
-import React, { Component } from 'react';
+import React, { Component, FormEvent } from 'react';
 
 import { MarkupType, FormFieldValue, FormError } from './types';
 
@@ -17,10 +17,11 @@ export interface MarkupProps {
   fill?: boolean,
   large?: boolean,
   required?: boolean,
-  requiredErrorMessage?: string;
+  requiredErrorMessage?: string,
   disabled?: boolean,
   autoComplete?: string,
-  validate?: (value: any) => FormError
+  validate?: (value: any) => FormError,
+  onChange?: (event?: FormEvent) => any,
 }
 
 export abstract class Markup<P extends MarkupProps, S = unknown> extends Component<P, S> {

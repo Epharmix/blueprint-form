@@ -42,6 +42,12 @@ export default class SelectInput extends Markup<SelectInputProps> {
         options={this.props.options}
         disabled={this.props.disabled}
         {...field}
+        onChange={(event) => {
+          field.onChange(event);
+          if (this.props.onChange) {
+            this.props.onChange(event);
+          }
+        }}
       />
     );
   }
@@ -113,10 +119,13 @@ export class SelectBooleanInput extends Markup<SelectBooleanInputProps> {
         disabled={this.props.disabled}
         {...field}
         value={String(field.value)}
-        onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+        onChange={(event) => {
           const value = event.currentTarget.value === 'true';
           form.setFieldTouched(this.props.name, true);
           form.setFieldValue(field.name, value);
+          if (this.props.onChange) {
+            this.props.onChange(event);
+          }
         }}
       />
     );

@@ -96,6 +96,12 @@ export default class TextInput extends Markup<TextInputProps> {
         autoComplete={this.props.autoComplete}
         spellCheck={this.props.spellCheck}
         {...field} 
+        onChange={(event) => {
+          field.onChange(event);
+          if (this.props.onChange) {
+            this.props.onChange(event);
+          }
+        }}
       />
     );
   }
@@ -181,6 +187,12 @@ export class TextArea extends Markup<TextAreaProps> {
         autoComplete={this.props.autoComplete}
         spellCheck={this.props.spellCheck}
         {...field} 
+        onChange={(event) => {
+          field.onChange(event);
+          if (this.props.onChange) {
+            this.props.onChange(event);
+          }
+        }}
       />
     );
   }
