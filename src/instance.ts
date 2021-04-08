@@ -7,14 +7,14 @@ import {
 } from './components/types';
 
 const SerializeDate = (value: Date | null, format: string): string | null => {
-  if (value === null) {
+  if (value == null) {
     return null;
   }
   return moment(value).format(format);
 };
 
 const DeserializeDate = (value: string | null, format: string, tz?: string): Date | null | undefined => {
-  if (value === null) {
+  if (value == null) {
     return null;
   }
   tz = tz || moment.tz.guess();
