@@ -576,6 +576,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               <DateInput
                 label="Exam Date"
                 name="examAt"
+                format="YYYY-MM-DD"
                 bare
                 fill
                 large={isLarge}

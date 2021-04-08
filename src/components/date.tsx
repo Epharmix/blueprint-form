@@ -24,6 +24,9 @@ interface DateInputState {
   isNoEnd: boolean
 }
 
+const DEFAULT_MIN = moment().subtract(150, 'years').toDate();
+const DEFAULT_MAX = moment().add(50, 'years').toDate();
+
 class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<FormikValues> }, DateInputState> {
 
   public readonly type: MarkupType = MarkupType.Date;
@@ -129,8 +132,8 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
         placeholder={this.props.format || DEFAULT_FORMAT}
         showActionsBar
         canClearSelection={false}
-        minDate={this.props.min}
-        maxDate={this.props.max}
+        minDate={this.props.min || DEFAULT_MIN}
+        maxDate={this.props.max || DEFAULT_MAX}
         initialMonth={this.props.min || new Date()}
         inputProps={{
           inputRef: (ref) => this.ref = ref,
