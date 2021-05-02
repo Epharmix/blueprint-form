@@ -21,30 +21,50 @@ export default class Checkbox extends Markup<CheckboxProps> {
 
   constructor(props: CheckboxProps) {
     super(props);
+    this.validate = this.validate.bind(this);
+  }
+
+  private validate(value: any): FormError {
+    let error = null;
+    if (this.props.required && !value) {
+      error = this.props.requiredErrorMessage || 'This is required!';
+    }
+    return error;
   }
 
   public render(): JSX.Element {
     return (
-      <Field name={this.props.name} type="checkbox">
-        {({ field }) => (
-          <_Checkbox
-            aria-describedby={this.errorId}
-            id={this.id}
-            labelElement={<label htmlFor={this.id}>{this.props.label}</label>}
-            inline={this.props.inline}
-            large={this.props.large}
-            value={this.props.value}
-            checked={field.checked}
-            name={field.name}
-            onChange={(event) => {
-              field.onChange(event);
-              if (this.props.onChange) {
-                this.props.onChange(event);
-              }
-            }}
-            onBlur={field.onBlur}
-            disabled={this.props.disabled}
-          />
+      <Field name={this.props.name} type="checkbox" validate={this.validate}>
+        {({ field, meta }) => (
+          <>
+            <_Checkbox
+              aria-describedby={this.errorId}
+              id={this.id}
+              labelElement={<label htmlFor={this.id}>{this.props.label}</label>}
+              inline={this.props.inline}
+              large={this.props.large}
+              value={this.props.value}
+              checked={field.checked}
+              name={field.name}
+              onChange={(event) => {
+                field.onChange(event);
+                if (this.props.onChange) {
+                  this.props.onChange(event);
+                }
+              }}
+              onBlur={field.onBlur}
+              disabled={this.props.disabled}
+            />
+            {
+              meta.touched ? (
+                <div className="bp3-form-helper-text" style={{
+                  color: '#c23030'
+                }}>
+                  {this.getErrorNode(meta.error)}
+                </div>
+              ) : null
+            }
+          </>
         )}
       </Field>
     );

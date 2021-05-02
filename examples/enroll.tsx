@@ -145,6 +145,7 @@ export interface EnrollData {
   hasScale: boolean,
   baselineWeight?: number,
   isHappy: boolean,
+  hasAccepted?: boolean,
   description: string,
   isLevelA: boolean,
   isLevelB: boolean,
@@ -222,6 +223,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     hasScale: true,
     baselineWeight: 123,
     isHappy: false,
+    hasAccepted: null,
     description: 'Etiam varius neque feugiat elit aliquam venenatis.',
     isLevelA: true,
     isLevelB: false,
@@ -486,6 +488,14 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               large={isLarge}
               disabled={isDisabled}
               onChange={onFieldChange.bind(this, 'isHappy')}
+            />
+            <Checkbox
+              label="I have read and agree to accepte the EULA"
+              name="hasAccepted"
+              required
+              large={isLarge}
+              disabled={isDisabled}
+              onChange={onFieldChange.bind(this, 'hasAccepted')}
             />
             <CountryInput
               label="Country"
