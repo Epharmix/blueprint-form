@@ -490,9 +490,14 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               onChange={onFieldChange.bind(this, 'isHappy')}
             />
             <Checkbox
-              label="I have read and agree to accepte the EULA"
+              labelElement={
+                <React.Fragment>
+                  I have read and agree to accept <a href="https://google.com">the EULA</a>
+                </React.Fragment>
+              }
               name="hasAccepted"
               required
+              requiredErrorMessage="You must accept the EULA!"
               large={isLarge}
               disabled={isDisabled}
               onChange={onFieldChange.bind(this, 'hasAccepted')}
