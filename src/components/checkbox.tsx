@@ -33,19 +33,26 @@ export default class Checkbox extends Markup<CheckboxProps> {
   }
 
   public render(): JSX.Element {
+    const label = this.props.labelElement
+      ? this.props.labelElement
+      : this.props.label;
     return (
       <Field name={this.props.name} type="checkbox" validate={this.validate}>
         {({ field, meta }) => (
-          <>
+          <FormGroup
+            intent={meta.error && meta.touched ? 'danger' : 'none'}
+            helperText={meta.touched ? this.getErrorNode(meta.error) : null}
+          >
             <_Checkbox
               aria-describedby={this.errorId}
               id={this.id}
-              labelElement={<label htmlFor={this.id}>{this.props.label}</label>}
+              labelElement={<label htmlFor={this.id}>{label}</label>}
               inline={this.props.inline}
               large={this.props.large}
               value={this.props.value}
               checked={field.checked}
               name={field.name}
+              required={this.props.required}
               onChange={(event) => {
                 field.onChange(event);
                 if (this.props.onChange) {
@@ -55,16 +62,7 @@ export default class Checkbox extends Markup<CheckboxProps> {
               onBlur={field.onBlur}
               disabled={this.props.disabled}
             />
-            {
-              meta.touched ? (
-                <div className="bp3-form-helper-text" style={{
-                  color: '#c23030'
-                }}>
-                  {this.getErrorNode(meta.error)}
-                </div>
-              ) : null
-            }
-          </>
+          </FormGroup>
         )}
       </Field>
     );
