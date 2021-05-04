@@ -12,6 +12,7 @@ export interface MarkupProps {
   style?: React.CSSProperties,
   className?: string,
   label?: string,
+  labelElement?: JSX.Element,
   name?: string,
   bare?: boolean,
   fill?: boolean,
