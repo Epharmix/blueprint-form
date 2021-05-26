@@ -104,6 +104,8 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
     }
     if (error !== null) {
       this.ref.setAttribute('aria-describedby', this.errorId);
+    } else {
+      this.ref.removeAttribute('aria-describedby');
     }
     return error;
   }

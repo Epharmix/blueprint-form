@@ -173,6 +173,8 @@ export class TextArea extends Markup<TextAreaProps> {
     }
     if (error !== null) {
       this.ref.setAttribute('aria-describedby', this.errorId);
+    } else {
+      this.ref.removeAttribute('aria-describedby');
     }
     return error;
   }
