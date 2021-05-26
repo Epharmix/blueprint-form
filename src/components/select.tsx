@@ -6,7 +6,7 @@ import React from 'react';
 import { Field } from 'formik';
 import { FormGroup, HTMLSelect } from '@blueprintjs/core';
 
-import { MarkupType, Option } from './types';
+import { MarkupType, Option, FormError } from './types';
 import { MarkupProps, Markup } from './markup';
 
 export interface SelectInputProps extends MarkupProps {
@@ -21,12 +21,24 @@ export default class SelectInput extends Markup<SelectInputProps> {
 
   constructor(props: SelectInputProps) {
     super(props);
+    this.validate = this.validate.bind(this);
     this.ref = null;
   }
 
+  private validate(value: number | null): FormError {
+    const error = this._validate(value);
+    if (error !== null) {
+      this.ref.setAttribute('aria-describedby', this.errorId);
+    } else {
+      this.ref.removeAttribute('aria-describedby');
+    }
+    return error;
+  }
+
   public componentDidMount(): void {
-    this.ref.setAttribute('aria-label', this.props.label);
-    this.ref.setAttribute('aria-describedby', this.errorId);
+    if (this.props.ariaLabel) {
+      this.ref.setAttribute('aria-label', this.props.ariaLabel);
+    }
   }
 
   private getInput(field, meta): JSX.Element {
@@ -54,7 +66,7 @@ export default class SelectInput extends Markup<SelectInputProps> {
 
   public render(): JSX.Element {
     return (
-      <Field name={this.props.name}>
+      <Field name={this.props.name} validate={this.validate}>
         {({ field, meta }) => {
           const input = this.getInput(field, meta);
           if (this.props.bare) {
@@ -90,12 +102,24 @@ export class SelectBooleanInput extends Markup<SelectBooleanInputProps> {
 
   constructor(props: SelectInputProps) {
     super(props);
+    this.validate = this.validate.bind(this);
     this.ref = null;
   }
 
+  private validate(value: number | null): FormError {
+    const error = this._validate(value);
+    if (error !== null) {
+      this.ref.setAttribute('aria-describedby', this.errorId);
+    } else {
+      this.ref.removeAttribute('aria-describedby');
+    }
+    return error;
+  }
+
   public componentDidMount(): void {
-    this.ref.setAttribute('aria-label', this.props.label);
-    this.ref.setAttribute('aria-describedby', this.errorId);
+    if (this.props.ariaLabel) {
+      this.ref.setAttribute('aria-label', this.props.ariaLabel);
+    }
   }
 
   private getInput(field, form, meta): JSX.Element {
@@ -133,7 +157,7 @@ export class SelectBooleanInput extends Markup<SelectBooleanInputProps> {
 
   public render(): JSX.Element {
     return (
-      <Field name={this.props.name}>
+      <Field name={this.props.name} validate={this.validate}>
         {({ field, form, meta }) => {
           const input = this.getInput(field, form, meta);
           if (this.props.bare) {
