@@ -483,6 +483,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
                 value: 'green'
               }]}
               fill
+              required
               large={isLarge}
               disabled={isDisabled}
               onChange={onFieldChange.bind(this, 'color')}
