@@ -13,6 +13,7 @@ export interface MarkupProps {
   className?: string,
   label?: string,
   labelElement?: JSX.Element,
+  ariaLabel?: string,
   name?: string,
   bare?: boolean,
   fill?: boolean,
