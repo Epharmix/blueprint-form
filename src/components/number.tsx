@@ -39,12 +39,18 @@ export default class TextInput extends Markup<NumberInputProps> {
     if (!error && this.props.validate) {
       error = this.props.validate(value);
     }
+    if (error !== null) {
+      this.ref.setAttribute('aria-describedby', this.errorId);
+    } else {
+      this.ref.removeAttribute('aria-describedby');
+    }
     return error;
   }
 
   public componentDidMount(): void {
-    this.ref.setAttribute('aria-label', this.props.label);
-    this.ref.setAttribute('aria-describedby', this.errorId);
+    if (this.props.ariaLabel) {
+      this.ref.setAttribute('aria-label', this.props.ariaLabel);
+    }
   }
 
   private getInput(field, form, meta): JSX.Element {
