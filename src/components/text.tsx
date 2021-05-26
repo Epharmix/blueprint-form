@@ -42,8 +42,9 @@ export default class TextInput extends Markup<TextInputProps> {
   }
 
   public componentDidMount(): void {
-    this.ref.setAttribute('aria-label', this.props.label);
-    this.ref.setAttribute('aria-describedby', this.errorId);
+    if (this.props.ariaLabel) {
+      this.ref.setAttribute('aria-label', this.props.ariaLabel);
+    }
   }
 
   private validate(value: string | null): FormError {
@@ -72,6 +73,9 @@ export default class TextInput extends Markup<TextInputProps> {
     }
     if (!error && this.props.validate) {
       error = this.props.validate(value);
+    }
+    if (error !== null) {
+      this.ref.setAttribute('aria-describedby', this.errorId);
     }
     return error;
   }
@@ -152,8 +156,9 @@ export class TextArea extends Markup<TextAreaProps> {
   }
 
   public componentDidMount(): void {
-    this.ref.setAttribute('aria-label', this.props.label);
-    this.ref.setAttribute('aria-describedby', this.errorId);
+    if (this.props.ariaLabel) {
+      this.ref.setAttribute('aria-label', this.props.ariaLabel);
+    }
   }
 
   private validate(value: string | null): FormError {
@@ -165,6 +170,9 @@ export class TextArea extends Markup<TextAreaProps> {
     }
     if (!error && this.props.validate) {
       error = this.props.validate(value);
+    }
+    if (error !== null) {
+      this.ref.setAttribute('aria-describedby', this.errorId);
     }
     return error;
   }

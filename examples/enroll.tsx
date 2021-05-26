@@ -380,6 +380,14 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               spellCheck
               onChange={onFieldChange.bind(this, 'shortDescription')}
             />
+            <TextInput
+              name="shortDescription"
+              ariaLabel="Short Description"
+              placeholder="Short Description (With aria-label)"
+              fill
+              spellCheck
+              onChange={onFieldChange.bind(this, 'shortDescriptionNoLabel')}
+            />
             <Checkbox
               label="Level A"
               name="isLevelA"
