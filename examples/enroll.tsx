@@ -139,6 +139,7 @@ export interface EnrollData {
   dateAt?: Date,
   tz: string,
   firstName: string,
+  firstNameWithAutoComplete: string,
   lastName: string,
   pin: string,
   phone: string,
@@ -217,6 +218,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     examAt: null,
     tz: 'US/Mountain',
     firstName: 'John',
+    firstNameWithAutoComplete: '',
     lastName: 'Doe',
     pin: '123',
     phone: '',
@@ -279,6 +281,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
       <Form
         form={form}
         validate={validate}
+        validateOnMount={false}
         onSubmit={onSubmit}
         onChange={onChange}
       >
@@ -337,6 +340,16 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               large={isLarge}
               disabled={isDisabled}
               onChange={onFieldChange.bind(this, 'firstName')}
+            />
+            <TextInput
+              className="mb-0 pb-0"
+              label="First Name (With Autocomplete)"
+              name="firstNameWithAutoComplete"
+              autoComplete="given-name"
+              pattern={REGEX_NAME}
+              patternError="Please enter a valid first name."
+              onChange={onFieldChange.bind(this, 'firstNameWithAutoComplete')}
+              required
             />
             <TextInput
               label="Last Name"
