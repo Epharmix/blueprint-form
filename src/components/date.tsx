@@ -148,6 +148,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
           style: this.props.style,
           large: this.props.large,
           intent: meta.error && meta.touched ? 'danger' : 'none',
+          autoComplete: this.props.autoComplete ? this.props.autoComplete : 'off'
         }}
         value={meta.value}
         onChange={(value: Date) => {

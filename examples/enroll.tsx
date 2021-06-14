@@ -328,6 +328,7 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
               name="dateAt"
               format="MM/DD"
               fill
+              autoComplete="bday"
               large={isLarge}
               disabled={isDisabled}
               onChange={onFieldChange.bind(this, 'dateAt')}
