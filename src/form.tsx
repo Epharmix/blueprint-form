@@ -67,6 +67,7 @@ interface FormProps<Values extends FormikValues, S extends any = never> {
   form: FormInstance<Values, S>,
   validate?: (values: Values) => void | FormErrors | Promise<FormErrors>;
   validateOnChange?: boolean;
+  validateOnMount?: boolean;
   children?: ((props: FormikProps<Values>) => JSX.Element) | JSX.Element | JSX.Element[],
   onSubmit?: (data: any) => void,
   onChange?: (data: any, isValid: boolean) => void,
@@ -78,6 +79,7 @@ const Form = <Values extends FormikValues, S extends any = never>({
   form: instance,
   validate,
   validateOnChange,
+  validateOnMount = true,
   children,
   onSubmit,
   onChange,
@@ -95,7 +97,7 @@ const Form = <Values extends FormikValues, S extends any = never>({
       initialValues={instance.initialData}
       validate={validate}
       validateOnChange={validateOnChange}
-      validateOnMount={true}
+      validateOnMount={validateOnMount}
       onSubmit={(data) => instance.onSubmit(data, onSubmit)}
     >
       {(props) => {
