@@ -66,7 +66,7 @@ export default class TextInput extends Markup<NumberInputProps> {
         min={this.props.min}
         max={this.props.max}
         intent={meta.error && meta.touched ? 'danger' : 'none'}
-        value={field.value || ''}
+        value={field.value != null ? field.value : ''}
         placeholder={this.props.placeholder}
         onFocus={() => {
           form.setFieldTouched(field.name);

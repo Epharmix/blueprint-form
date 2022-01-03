@@ -229,12 +229,12 @@ const Enroll = ({ onSubmit, data, isDisabled, isLarge }: EnrollProps): JSX.Eleme
     description: 'Etiam varius neque feugiat elit aliquam venenatis.',
     isLevelA: true,
     isLevelB: false,
-    modules: [],
+    modules: null,
     days: [1, 5],
     dmType: 'II',
     color: 'green',
     country: 'Air Nomads',
-    height: 180,
+    height: 2,
     salute: 'HTTR!',
     holiday: 'christmas'
   };

@@ -153,7 +153,7 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
                     disabled={this.props.disabled || this.isDisabled(option.value, field.value)}
                     onChange={(event) => {
                       const isChecked = event.currentTarget.checked;
-                      const _value: any[] = field.value;
+                      const _value: any[] = field.value || [];
                       let value: any[];
                       if (isChecked) {
                         value = _value.concat(option.value);
