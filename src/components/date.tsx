@@ -79,10 +79,10 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
     return _date.format(this.props.format || DEFAULT_FORMAT);
   }
 
-  private parseDate(value: string): Date | null {
+  private parseDate(value: string): Date | false {
     const date = moment(value, this.props.format || DEFAULT_FORMAT);
     if (!date.isValid()) {
-      return null;
+      return false;
     }
     return date.toDate();
   }
