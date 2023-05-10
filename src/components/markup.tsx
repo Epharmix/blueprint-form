@@ -7,6 +7,7 @@ import uid from 'uid';
 import React, { Component, FormEvent } from 'react';
 
 import { MarkupType, FormFieldValue, FormError } from './types';
+import { FormExtraContext } from '../context';
 
 export interface MarkupProps {
   style?: React.CSSProperties,
@@ -29,6 +30,8 @@ export interface MarkupProps {
 export abstract class Markup<P extends MarkupProps, S = unknown> extends Component<P, S> {
 
   static getID = (): string => uid(16);
+  
+  static contextType = FormExtraContext;
 
   public readonly abstract type: MarkupType;
   protected readonly id: string;

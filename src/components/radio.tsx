@@ -39,7 +39,7 @@ export default class RadioGroup extends Markup<RadioGroupProps> {
               }
             }}
             selectedValue={field.value}
-            disabled={this.props.disabled}
+            disabled={this.props.disabled || this.context.isDisabled}
           >
             {
               this.props.options.map((option, i) => (

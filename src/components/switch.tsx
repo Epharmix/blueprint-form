@@ -44,7 +44,7 @@ export default class SwitchInput extends Markup<SwitchInputProps> {
             onBlur={field.onBlur}
             innerLabel={this.props.innerLabel}
             innerLabelChecked={this.props.innerLabelChecked}
-            disabled={this.props.disabled}
+            disabled={this.props.disabled || this.context.isDisabled}
           />
         )}
       </Field>

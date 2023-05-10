@@ -97,7 +97,7 @@ export default class TextInput extends Markup<TextInputProps> {
         placeholder={this.props.placeholder}
         id={this.id}
         intent={meta.error && meta.touched ? 'danger' : 'none'}
-        disabled={this.props.disabled}
+        disabled={this.props.disabled || this.context.isDisabled}
         type={this.props.type}
         autoComplete={this.props.autoComplete}
         spellCheck={this.props.spellCheck}
@@ -181,7 +181,7 @@ export class TextArea extends Markup<TextAreaProps> {
     return error;
   }
 
-  private getInput(field, meta): JSX.Element {
+  private getInput(field, form, meta): JSX.Element {
     return (
       <_TextArea
         inputRef={(ref) => this.ref = ref}
@@ -195,7 +195,7 @@ export class TextArea extends Markup<TextAreaProps> {
         growVertically={this.props.growVertically}
         intent={meta.error && meta.touched ? 'danger' : 'none'}
         placeholder={this.props.placeholder}
-        disabled={this.props.disabled}
+        disabled={this.props.disabled || this.context.isDisabled}
         autoComplete={this.props.autoComplete}
         spellCheck={this.props.spellCheck}
         {...field} 
@@ -212,8 +212,8 @@ export class TextArea extends Markup<TextAreaProps> {
   public render(): JSX.Element {
     return (
       <Field name={this.props.name} validate={this.validate}>
-        {({ field, meta }) => {
-          const input = this.getInput(field, meta);
+        {({ field, form, meta }) => {
+          const input = this.getInput(field, form, meta);
           if (this.props.bare) {
             return input;
           }

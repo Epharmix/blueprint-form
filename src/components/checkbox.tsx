@@ -60,7 +60,7 @@ export default class Checkbox extends Markup<CheckboxProps> {
                 }
               }}
               onBlur={field.onBlur}
-              disabled={this.props.disabled}
+              disabled={this.props.disabled || this.context.isDisabled}
             />
           </FormGroup>
         )}
@@ -150,7 +150,7 @@ export class CheckboxGroup extends Markup<CheckboxGroupProps> {
                     value={String(option.value)}
                     inline={this.props.inline}
                     large={this.props.large}
-                    disabled={this.props.disabled || this.isDisabled(option.value, field.value)}
+                    disabled={this.props.disabled || this.context.isDisabled || this.isDisabled(option.value, field.value)}
                     onChange={(event) => {
                       const isChecked = event.currentTarget.checked;
                       const _value: any[] = field.value || [];

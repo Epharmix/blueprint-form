@@ -16,11 +16,16 @@ const App = () => {
 
   const [rawData, setRawData] = useState('');
   const [formData, setFormData] = useState(undefined);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isFormDisabled, setIsFormDisabled] = useState(false);
+  const [isFieldDisabled, setIsFieldDisabled] = useState(false);
   const [isLarge, setIsLarge] = useState(false);
 
-  const toggleDisabled = () => {
-    setIsDisabled(!isDisabled);
+  const toggleFormDisabled = () => {
+    setIsFormDisabled(!isFormDisabled);
+  };
+
+  const toggleFieldDisabled = () => {
+    setIsFieldDisabled(!isFieldDisabled);
   };
 
   const toggleLarge = () => {
@@ -61,7 +66,8 @@ const App = () => {
         }}>
           <Enroll
             data={formData}
-            isDisabled={isDisabled}
+            isFormDisabled={isFormDisabled}
+            isFieldDisabled={isFieldDisabled}
             isLarge={isLarge}
             onSubmit={onSubmit}
           />
@@ -97,12 +103,20 @@ const App = () => {
             style={{
               marginRight: '10px'
             }}
-            onClick={toggleDisabled}
+            onClick={toggleFormDisabled}
           >
-            Toggle Disabled
+            Form Disabled: {isFormDisabled ? 'Yes' : 'No'}
+          </Button>
+          <Button
+            style={{
+              marginRight: '10px'
+            }}
+            onClick={toggleFieldDisabled}
+          >
+            Field Disabled: {isFieldDisabled ? 'Yes' : 'No'}
           </Button>
           <Button onClick={toggleLarge}>
-            Toggle Small/Large
+            Size: {isLarge ? 'Large' : 'Small'}
           </Button>
         </Card>
       </Card>

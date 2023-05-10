@@ -41,7 +41,7 @@ export default class SelectInput extends Markup<SelectInputProps> {
     }
   }
 
-  private getInput(field, meta): JSX.Element {
+  private getInput(field, form, meta): JSX.Element {
     return (
       <HTMLSelect
         elementRef={(ref) => this.ref = ref}
@@ -52,7 +52,7 @@ export default class SelectInput extends Markup<SelectInputProps> {
         id={this.id}
         intent={meta.error && meta.touched ? 'danger' : 'none'}
         options={this.props.options}
-        disabled={this.props.disabled}
+        disabled={this.props.disabled || this.context.isDisabled}
         {...field}
         onChange={(event) => {
           field.onChange(event);
@@ -67,8 +67,8 @@ export default class SelectInput extends Markup<SelectInputProps> {
   public render(): JSX.Element {
     return (
       <Field name={this.props.name} validate={this.validate}>
-        {({ field, meta }) => {
-          const input = this.getInput(field, meta);
+        {({ field, form, meta }) => {
+          const input = this.getInput(field, form, meta);
           if (this.props.bare) {
             return input;
           }
@@ -140,7 +140,7 @@ export class SelectBooleanInput extends Markup<SelectBooleanInputProps> {
         id={this.id}
         intent={meta.error && meta.touched ? 'danger' : 'none'}
         options={options}
-        disabled={this.props.disabled}
+        disabled={this.props.disabled || this.context.isDisabled}
         {...field}
         value={String(field.value)}
         onChange={(event) => {

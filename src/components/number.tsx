@@ -82,7 +82,7 @@ export default class TextInput extends Markup<NumberInputProps> {
             this.props.onChange();
           }
         }}
-        disabled={this.props.disabled}
+        disabled={this.props.disabled || this.context.isDisabled}
       />
     );
   }

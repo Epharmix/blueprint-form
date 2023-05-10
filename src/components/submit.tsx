@@ -29,7 +29,7 @@ export default class SubmitButton extends Markup<SubmitButtonProps> {
         className={this.props.className}
         style={this.props.style}
         type="submit"
-        disabled={this.props.disabled}
+        disabled={this.props.disabled || this.context.isDisabled}
       >
         {this.props.children}
       </Button>

@@ -158,7 +158,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
             this.props.onChange();
           }
         }}
-        disabled={this.props.disabled || this.state.isNoEnd}
+        disabled={this.props.disabled || this.context.isDisabled || this.state.isNoEnd}
       />
     );
   }
@@ -199,7 +199,7 @@ class DateInput extends Markup<DateInputProps & { formik?: FormikContextType<For
                           labelElement={<label htmlFor={this.switchId}>No End</label>}
                           large={this.props.large}
                           checked={this.state.isNoEnd}
-                          disabled={this.props.disabled}
+                          disabled={this.props.disabled || this.context.isDisabled}
                           onChange={this.toggleNoEnd}
                         />
                         <span>&nbsp;&nbsp;&nbsp;&nbsp;<b>OR</b></span>

@@ -2,7 +2,11 @@
  * Form instance
  */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useRef
+} from 'react';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import {
   Formik,
@@ -15,6 +19,7 @@ import {
 import { FormErrors } from './components/types';
 import FormInstance from './instance';
 import { isFunction } from './utils';
+import { FormExtraContextProvider } from './context';
 
 interface FormikOnChangeProps<Values extends FormikValues> {
   onChange: (context: FormikContextType<Values>) => void;
@@ -72,7 +77,8 @@ interface FormProps<Values extends FormikValues, S extends any = never> {
   onSubmit?: (data: any) => void,
   onChange?: (data: any, isValid: boolean) => void,
   className?: string,
-  style?: React.CSSProperties
+  style?: React.CSSProperties,
+  disabled?: boolean
 }
 
 const Form = <Values extends FormikValues, S extends any = never>({
@@ -84,7 +90,8 @@ const Form = <Values extends FormikValues, S extends any = never>({
   onSubmit,
   onChange,
   className,
-  style
+  style,
+  disabled
 }: FormProps<Values, S>): JSX.Element => {
   const formRef = useRef<HTMLFormElement>(null);
   const _onChange = ({ values, isValid, dirty }: FormikContextType<Values>) => {
@@ -110,15 +117,19 @@ const Form = <Values extends FormikValues, S extends any = never>({
             onReset={props.handleReset}
             onSubmit={props.handleSubmit}
           >
-            {
-              children
-                ? isFunction(children)
-                  ? (children as (props: FormikProps<Values>) => JSX.Element)(props)
-                  : children
-                : null
-            }
-            <FormikOnChange<Values> onChange={_onChange} />
-            <FormikOnError<Values> form={formRef.current} />
+            <FormExtraContextProvider
+              isDisabled={disabled}
+            >
+              {
+                children
+                  ? isFunction(children)
+                    ? (children as (props: FormikProps<Values>) => JSX.Element)(props)
+                    : children
+                  : null
+              }
+              <FormikOnChange<Values> onChange={_onChange} />
+              <FormikOnError<Values> form={formRef.current} />
+            </FormExtraContextProvider>
           </form>
         );
       }}

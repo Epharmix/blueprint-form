@@ -1,6 +1,5 @@
 import {
   useField,
-  useFormikContext as useFormContext,
   connect,
   FieldArray,
   ArrayHelpers
@@ -8,6 +7,7 @@ import {
 
 import Form from './form';
 import FormInstance, { DateSerialized } from './instance';
+import { useFormContext } from './context';
 import { Markup, MarkupProps } from './components/markup';
 import DateInput, {
   DateInputProps,
@@ -35,7 +35,6 @@ import Checkbox, {
 } from './components/checkbox';
 import RadioGroup, { RadioGroupProps } from './components/radio';
 import SubmitButton, { SubmitButtonProps } from './components/submit';
-
 import { FormData, FormValues, FormError, FormErrors } from './components/types';
 
 export type {
